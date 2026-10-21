@@ -40,18 +40,25 @@ export async function GET(request: NextRequest) {
     // 2. If coordinates are still missing, auto-detect via client IP
     if (userLat === null || userLng === null || isNaN(userLat) || isNaN(userLng)) {
       try {
-        const ipRes = await fetch('https://ipwho.is/', { cache: 'no-store' });
+        const forwarded = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+        const clientIp = forwarded || request.headers.get('x-real-ip') || '';
+        const isPublicIp = clientIp && 
+          !clientIp.startsWith('192.168.') && 
+          !clientIp.startsWith('10.') && 
+          !clientIp.startsWith('172.16.') && 
+          clientIp !== '127.0.0.1' && 
+          clientIp !== '::1';
+
+        const ipUrl = isPublicIp ? `https://ipwho.is/${clientIp}` : 'https://ipwho.is/';
+        const ipRes = await fetch(ipUrl, { cache: 'no-store' });
         const ipData = await ipRes.json();
-        if (ipData && ipData.latitude && ipData.longitude) {
+        if (ipData && ipData.success !== false && ipData.latitude && ipData.longitude) {
           userLat = ipData.latitude;
           userLng = ipData.longitude;
           userLocationName = `${ipData.city || ipData.region}, ${ipData.country}`;
         }
       } catch (err) {
         console.error('IP fallback error:', err);
-        userLat = 6.4541;
-        userLng = 3.3947;
-        userLocationName = 'Lagos, Nigeria';
       }
     }
 

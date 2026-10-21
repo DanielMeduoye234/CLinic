@@ -20,7 +20,10 @@ import {
   Globe2,
   Zap,
   Target,
-  Footprints
+  Footprints,
+  AlertTriangle,
+  HelpCircle,
+  X
 } from 'lucide-react';
 import { Hospital, formatDistanceDisplay } from '@/lib/hospital-data';
 
@@ -41,12 +44,14 @@ export default function FindHospitalsPage() {
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number; name?: string } | null>(null);
   const [locationAccuracy, setLocationAccuracy] = useState<number | null>(null);
-  const [locationStatus, setLocationStatus] = useState<string>('Acquiring 100% precise GPS location...');
+  const [locationStatus, setLocationStatus] = useState<string>('Acquiring live location...');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [sortBy, setSortBy] = useState<'distance' | 'wait' | 'rating'>('distance');
   const [activeTabMobile, setActiveTabMobile] = useState<'list' | 'map'>('list');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showGpsDeniedHelp, setShowGpsDeniedHelp] = useState(false);
+  const [insecureContextNotice, setInsecureContextNotice] = useState(false);
 
   // Core Function: Fetch real live hospitals from API route
   const fetchLiveHospitals = useCallback(async (lat?: number, lng?: number, queryText?: string, accuracyMeters?: number) => {
@@ -95,38 +100,102 @@ export default function FindHospitalsPage() {
     }
   }, []);
 
-  // Request High-Precision GPS with maximumAge: 0
+  // Client-Side Network Location Fallback (queries direct phone network IP if GPS denied)
+  const fallbackClientNetworkLocation = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      const res = await fetch('https://ipwho.is/');
+      const data = await res.json();
+      if (data && data.success !== false && data.latitude && data.longitude) {
+        setUserLocation({
+          lat: data.latitude,
+          lng: data.longitude,
+          name: `${data.city || data.region}, ${data.country}`,
+        });
+        setLocationStatus(`Auto-detected: ${data.city || data.region}, ${data.country} (Network IP)`);
+        await fetchLiveHospitals(data.latitude, data.longitude);
+        return;
+      }
+    } catch (e) {
+      console.warn('Direct client IP lookup failed, falling back to server default:', e);
+    }
+    // Fallback if client IP fails
+    await fetchLiveHospitals();
+  }, [fetchLiveHospitals]);
+
+  // Request High-Precision GPS with two-stage fallback (Satellite -> Wi-Fi/Cellular -> Network IP)
   const requestHighPrecisionGPS = useCallback(() => {
-    if (typeof window === 'undefined' || !('geolocation' in navigator)) {
-      setLocationStatus('GPS not supported by this browser. Falling back to IP location.');
-      fetchLiveHospitals();
+    if (typeof window === 'undefined') return;
+
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const isSecure = window.isSecureContext || isLocalhost;
+
+    if (!('geolocation' in navigator)) {
+      setLocationStatus('GPS not supported by this browser. Detecting network location...');
+      fallbackClientNetworkLocation();
       return;
     }
 
-    setLocationStatus('Calibrating hardware GPS for 100% exact coordinates...');
-    setIsRefreshing(true);
+    if (!isSecure) {
+      setInsecureContextNotice(true);
+      setLocationStatus('Mobile GPS blocked by browser (insecure HTTP). Detecting network location...');
+      fallbackClientNetworkLocation();
+      return;
+    }
 
+    setIsRefreshing(true);
+    setLocationStatus('Calibrating hardware GPS for 100% exact coordinates...');
+
+    // Stage 1: Try high accuracy GPS (satellite / hardware)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude, accuracy } = pos.coords;
         setLocationAccuracy(accuracy);
+        setShowGpsDeniedHelp(false);
         setLocationStatus(`GPS Locked (±${Math.round(accuracy)}m precision). Finding nearest hospitals...`);
         fetchLiveHospitals(latitude, longitude, undefined, accuracy);
       },
       (error) => {
-        console.warn('High precision GPS error:', error.message);
-        setLocationStatus('GPS access denied or timed out. Auto-detecting via Network IP...');
-        fetchLiveHospitals();
+        console.warn('High precision GPS error code:', error.code, error.message);
+
+        if (error.code === error.PERMISSION_DENIED) {
+          // User denied permission or browser blocked it
+          setShowGpsDeniedHelp(true);
+          setLocationStatus('GPS access denied by browser. Detecting network location...');
+          fallbackClientNetworkLocation();
+        } else {
+          // Timeout or Position Unavailable (often indoors) -> Stage 2: Try cellular & Wi-Fi triangulation
+          setLocationStatus('Connecting via Wi-Fi & cellular towers...');
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              const { latitude, longitude, accuracy } = pos.coords;
+              setLocationAccuracy(accuracy);
+              setShowGpsDeniedHelp(false);
+              setLocationStatus(`Location Locked via Wi-Fi/Cell (±${Math.round(accuracy)}m precision)`);
+              fetchLiveHospitals(latitude, longitude, undefined, accuracy);
+            },
+            (err2) => {
+              console.warn('Standard location error:', err2.message);
+              setLocationStatus('GPS timed out. Auto-detecting your area via network IP...');
+              fallbackClientNetworkLocation();
+            },
+            {
+              enableHighAccuracy: false,
+              timeout: 8000,
+              maximumAge: 300000,
+            }
+          );
+        }
       },
       {
         enableHighAccuracy: true,
-        maximumAge: 0, // Force fresh hardware reading
-        timeout: 15000,
+        maximumAge: 0,
+        timeout: 9000,
       }
     );
-  }, [fetchLiveHospitals]);
+  }, [fetchLiveHospitals, fallbackClientNetworkLocation]);
 
-  // On initial mount: Immediately trigger high-precision GPS
+  // On initial mount: Trigger location request
   useEffect(() => {
     requestHighPrecisionGPS();
   }, [requestHighPrecisionGPS]);
@@ -243,7 +312,7 @@ export default function FindHospitalsPage() {
             />
             <button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-[11px] font-bold"
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-[11px] font-bold cursor-pointer"
             >
               Search
             </button>
@@ -257,9 +326,85 @@ export default function FindHospitalsPage() {
             className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm shadow-teal-600/20 active:scale-95 disabled:opacity-70 shrink-0 cursor-pointer"
           >
             <Compass className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-teal-200' : ''}`} />
-            <span>{isRefreshing ? 'Locking GPS...' : 'Locate My Exact Position'}</span>
+            <span>{isRefreshing ? 'Locating...' : 'Locate My Exact Position'}</span>
           </button>
         </form>
+
+        {/* Quick Jump City Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-none text-xs">
+          <span className="text-[11px] font-semibold text-slate-400 shrink-0">Quick jump:</span>
+          {['Lagos', 'Abuja', 'London', 'New York', 'Toronto', 'Johannesburg'].map((city) => (
+            <button
+              key={city}
+              type="button"
+              onClick={() => {
+                setSearchQuery(city);
+                fetchLiveHospitals(undefined, undefined, city);
+              }}
+              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-teal-50 hover:text-teal-700 hover:border-teal-300 border border-slate-200/70 text-slate-700 text-[11px] font-semibold shrink-0 transition-colors cursor-pointer"
+            >
+              📍 {city}
+            </button>
+          ))}
+        </div>
+
+        {/* GPS Permission Denied / Help Guide Card */}
+        {showGpsDeniedHelp && (
+          <div className="p-3.5 bg-amber-50/90 border border-amber-200 rounded-2xl text-xs text-amber-950 space-y-2.5 animate-fadeIn">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-2 font-bold text-amber-950">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>GPS Access Denied — How to enable on your phone:</span>
+              </div>
+              <button 
+                type="button" 
+                onClick={() => setShowGpsDeniedHelp(false)}
+                className="text-amber-700 hover:text-amber-950 p-1"
+                aria-label="Close"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-amber-900">
+              <div className="p-2.5 bg-white/80 rounded-xl border border-amber-200/70 shadow-2xs">
+                <strong className="block text-slate-900 mb-1">🍎 iPhone (Safari):</strong>
+                <span>
+                  Tap the <strong>aA</strong> icon in the address bar → tap <strong>Website Settings</strong> → set <strong>Location</strong> to <strong>Allow</strong>.
+                </span>
+              </div>
+              <div className="p-2.5 bg-white/80 rounded-xl border border-amber-200/70 shadow-2xs">
+                <strong className="block text-slate-900 mb-1">🤖 Android (Chrome):</strong>
+                <span>
+                  Tap the <strong>lock / tune</strong> icon in the address bar → tap <strong>Permissions</strong> → set <strong>Location</strong> to <strong>Allow</strong>.
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 pt-0.5 flex-wrap">
+              <button
+                type="button"
+                onClick={requestHighPrecisionGPS}
+                className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs cursor-pointer active:scale-95"
+              >
+                Retry GPS Permission
+              </button>
+              <span className="text-[11px] text-amber-800">
+                Or type your neighborhood in the search bar above.
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Insecure Context (HTTP on mobile IP) Warning */}
+        {insecureContextNotice && (
+          <div className="p-3 bg-sky-50 border border-sky-200 rounded-xl text-[11px] text-sky-900 flex items-start gap-2">
+            <HelpCircle className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+            <span>
+              <strong>Note on Mobile Browsers:</strong> iOS Safari and Android Chrome require HTTPS to access satellite GPS when testing over a local network IP. We auto-detected your location via Network IP, or you can search your area directly.
+            </span>
+          </div>
+        )}
 
         {/* Live Precision Status Bar */}
         <div className="text-[11px] font-medium text-teal-900 bg-teal-50/80 px-3.5 py-2.5 rounded-xl border border-teal-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -466,7 +611,7 @@ export default function FindHospitalsPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedCategory('All')}
-                  className="px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold"
+                  className="px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold cursor-pointer"
                 >
                   Reset Category Filter
                 </button>
@@ -580,7 +725,7 @@ export default function FindHospitalsPage() {
                         <a
                           href={`tel:${hosp.phone}`}
                           onClick={(e) => e.stopPropagation()}
-                          className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+                          className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
                           title="Call Hospital"
                         >
                           <Phone className="w-3.5 h-3.5" />
@@ -590,7 +735,7 @@ export default function FindHospitalsPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="px-2.5 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold text-[11px] flex items-center gap-1 transition-colors"
+                          className="px-2.5 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Navigation className="w-3 h-3" />
                           <span>Directions</span>

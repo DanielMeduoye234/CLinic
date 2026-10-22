@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { useCart } from '@/lib/cart-context';
 import { supabase } from '@/lib/supabase/client';
@@ -24,6 +25,7 @@ import {
   Video, 
   ShieldCheck, 
   ArrowLeft, 
+  ArrowRight,
   Play, 
   Pause, 
   Download, 
@@ -34,6 +36,7 @@ import {
   Clock, 
   PlusCircle, 
   AlertTriangle,
+  Stethoscope,
   X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -42,7 +45,7 @@ export default function ConsultationChatRoomPage() {
   const params = useParams();
   const router = useRouter();
   const consultationId = params.id as string;
-  const { user, profile } = useAuth();
+  const { user, profile, doctorProfile, isLoading: isAuthLoading } = useAuth();
   const { addItem, openCart } = useCart();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -50,6 +53,13 @@ export default function ConsultationChatRoomPage() {
   const [doctor, setDoctor] = useState<DoctorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isDoctorView, setIsDoctorView] = useState(false);
+  const [isDoctorForbidden, setIsDoctorForbidden] = useState(false);
+  const [patientInfo, setPatientInfo] = useState<{
+    name: string;
+    symptoms: string;
+    urgency: string;
+    time?: string;
+  } | null>(null);
   const [isDoctorTyping, setIsDoctorTyping] = useState(false);
 
   // Audio recording state
@@ -70,7 +80,7 @@ export default function ConsultationChatRoomPage() {
   const [isPrescriptionModalOpen, setIsPrescriptionModalOpen] = useState(false);
 
   // Prescription Form State (for Doctors)
-  const [rxDiagnosis, setRxDiagnosis] = useState('');
+  const [rxDiagnosis, setRxDiagnosis] = useState('Acute Bacterial Sinusitis & Inflammation');
   const [rxMedications, setRxMedications] = useState<PrescribedMedication[]>([
     {
       name: 'Amoxicillin 500mg',
@@ -97,36 +107,103 @@ export default function ConsultationChatRoomPage() {
   useEffect(() => {
     async function initConsultation() {
       try {
-        // Query consultation details or doctor directly
         let docData: any = null;
+        let isDocChattingPatient = false;
 
-        // Try 1: check if consultationId matches a doctor_profile id or profile_id
-        const { data: d1 } = await supabase
-          .from('doctor_profiles')
+        // Check if this consultationId is a known demo consultation from the doctor dashboard
+        if (consultationId === 'cons-1') {
+          setPatientInfo({
+            name: 'David K. (38)',
+            symptoms: 'Acute throbbing migraine on left temple with photophobia for 2 days.',
+            urgency: 'moderate',
+            time: '5 mins ago',
+          });
+          if (profile?.role === 'doctor') {
+            setIsDoctorView(true);
+            isDocChattingPatient = true;
+          }
+        } else if (consultationId === 'cons-2') {
+          setPatientInfo({
+            name: 'Elena R. (29)',
+            symptoms: 'Itchy contact dermatitis rash on forearm after gardening.',
+            urgency: 'routine',
+            time: '18 mins ago',
+          });
+          if (profile?.role === 'doctor') {
+            setIsDoctorView(true);
+            isDocChattingPatient = true;
+          }
+        }
+
+        // Try 1: check if consultationId is an active consultation record in Supabase
+        const { data: consultationRecord } = await supabase
+          .from('consultations')
           .select(`
             id,
-            profile_id,
-            specialty,
-            medical_license_number,
-            hospital_affiliation,
-            years_of_experience,
-            consultation_fee,
-            is_online,
-            average_rating,
-            bio,
-            profiles (
+            patient_id,
+            doctor_id,
+            raw_symptoms,
+            pain_level,
+            symptom_duration,
+            ai_urgency,
+            ai_recommended_specialty,
+            ai_triage_summary,
+            status,
+            patient:profiles!consultations_patient_id_fkey (
               id,
               full_name,
-              avatar_url
+              avatar_url,
+              email
+            ),
+            doctor:doctor_profiles!consultations_doctor_id_fkey (
+              id,
+              profile_id,
+              specialty,
+              medical_license_number,
+              hospital_affiliation,
+              years_of_experience,
+              consultation_fee,
+              is_online,
+              average_rating,
+              bio,
+              profiles (
+                id,
+                full_name,
+                avatar_url
+              )
             )
           `)
           .eq('id', consultationId)
           .maybeSingle();
 
-        if (d1) {
-          docData = d1;
+        if (consultationRecord) {
+          docData = consultationRecord.doctor;
+          const patientName = (consultationRecord.patient as any)?.full_name || 'Verified Patient';
+          setPatientInfo({
+            name: patientName,
+            symptoms: consultationRecord.raw_symptoms || 'General clinical inquiry',
+            urgency: consultationRecord.ai_urgency || 'routine',
+          });
+
+          // Role enforcement:
+          if (profile?.role === 'doctor') {
+            const isAssignedDoctor = 
+              consultationRecord.doctor_id === doctorProfile?.id || 
+              (consultationRecord.doctor as any)?.profile_id === user?.id;
+
+            if (isAssignedDoctor) {
+              setIsDoctorView(true);
+              isDocChattingPatient = true;
+            } else {
+              // Doctor attempting to access another doctor's consultation or chat another doctor!
+              setIsDoctorForbidden(true);
+              setLoading(false);
+              return;
+            }
+          }
         } else {
-          const { data: d2 } = await supabase
+          // If not a consultation row, check if consultationId is a doctor's profile ID or doctor_profiles ID
+          const { data: d1 } = await supabase
             .from('doctor_profiles')
             .select(`
               id,
@@ -145,12 +222,46 @@ export default function ConsultationChatRoomPage() {
                 avatar_url
               )
             `)
-            .eq('profile_id', consultationId)
+            .eq('id', consultationId)
             .maybeSingle();
-          if (d2) docData = d2;
+
+          if (d1) {
+            docData = d1;
+          } else {
+            const { data: d2 } = await supabase
+              .from('doctor_profiles')
+              .select(`
+                id,
+                profile_id,
+                specialty,
+                medical_license_number,
+                hospital_affiliation,
+                years_of_experience,
+                consultation_fee,
+                is_online,
+                average_rating,
+                bio,
+                profiles (
+                  id,
+                  full_name,
+                  avatar_url
+                )
+              `)
+              .eq('profile_id', consultationId)
+              .maybeSingle();
+            if (d2) docData = d2;
+          }
+
+          // If current user is a doctor and trying to chat a doctor:
+          if (profile?.role === 'doctor' && !isDocChattingPatient) {
+            // Doctors cannot chat other doctors!
+            setIsDoctorForbidden(true);
+            setLoading(false);
+            return;
+          }
         }
 
-        // Try 2: Fallback to first verified doctor if not directly found
+        // Fallback doctor profile if needed
         if (!docData) {
           const { data: fallbackDoc } = await supabase
             .from('doctor_profiles')
@@ -183,7 +294,7 @@ export default function ConsultationChatRoomPage() {
 
         const physicianName = (docData?.profiles as any)?.full_name || 'Dr. Medical Specialist';
 
-        // Initialize starter welcome messages
+        // Initialize starter messages
         const starterMessages: ChatMessage[] = [
           {
             id: 'msg-system-1',
@@ -199,11 +310,34 @@ export default function ConsultationChatRoomPage() {
             consultation_id: consultationId,
             sender_id: docData?.profile_id || 'doctor-1',
             message_type: 'text',
-            content: `Hello! I am Dr. ${physicianName.replace('Dr. ', '')}. I have reviewed your clinical symptom intake. I am here to help you evaluate your condition and provide medical guidance. Could you tell me more about how long you've had these symptoms and if anything makes them better or worse?`,
+            content: `Hello! I am Dr. ${physicianName.replace('Dr. ', '')}. I have reviewed your clinical symptom intake. I am here to help evaluate your condition and provide medical guidance. Could you tell me more about how long you've had these symptoms and if anything makes them better or worse?`,
             is_read: true,
             created_at: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
           },
         ];
+
+        // If in doctor view for demo patient David K. or Elena R., add their initial symptom message:
+        if (consultationId === 'cons-1') {
+          starterMessages.push({
+            id: 'msg-patient-1',
+            consultation_id: consultationId,
+            sender_id: 'patient-david-k',
+            message_type: 'text',
+            content: 'Hello doctor, I have an acute throbbing migraine on my left temple with sensitivity to bright lights for the past 2 days. Over-the-counter paracetamol is not providing relief.',
+            is_read: true,
+            created_at: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
+          });
+        } else if (consultationId === 'cons-2') {
+          starterMessages.push({
+            id: 'msg-patient-2',
+            consultation_id: consultationId,
+            sender_id: 'patient-elena-r',
+            message_type: 'text',
+            content: 'Hi doctor! I have this itchy red contact dermatitis rash on my forearm after gardening yesterday. Could you review what soothing prescription might help?',
+            is_read: true,
+            created_at: new Date(Date.now() - 1000 * 60 * 6).toISOString(),
+          });
+        }
 
         setMessages(starterMessages);
       } catch (err) {
@@ -213,8 +347,10 @@ export default function ConsultationChatRoomPage() {
       }
     }
 
-    initConsultation();
-  }, [consultationId]);
+    if (!isAuthLoading) {
+      initConsultation();
+    }
+  }, [consultationId, profile, doctorProfile, user, isAuthLoading]);
 
   // Setup Supabase Realtime channel
   useEffect(() => {
@@ -236,10 +372,14 @@ export default function ConsultationChatRoomPage() {
     if (!inputText.trim()) return;
 
     const userText = inputText.trim();
+    const senderId = isDoctorView 
+      ? (user?.id || doctor?.profile_id || 'doctor-1')
+      : (user?.id || 'patient-user');
+
     const newMessage: ChatMessage = {
       id: `msg-${Date.now()}`,
       consultation_id: consultationId,
-      sender_id: user?.id || 'patient-user',
+      sender_id: senderId,
       message_type: 'text',
       content: userText,
       is_read: false,
@@ -256,9 +396,8 @@ export default function ConsultationChatRoomPage() {
       payload: newMessage,
     });
 
-    // If sent by patient, simulate doctor clinical response with realistic typing
-    const isDoctor = profile?.role === 'doctor' || user?.id === doctor?.profile_id;
-    if (!isDoctor) {
+    // If sent by patient in patient view, simulate doctor clinical response with realistic typing
+    if (!isDoctorView) {
       setIsDoctorTyping(true);
       setTimeout(() => {
         setIsDoctorTyping(false);
@@ -469,6 +608,90 @@ export default function ConsultationChatRoomPage() {
 
   const docName = (doctor?.profiles as any)?.full_name || 'Dr. Anya Sharma, MD';
 
+  // 1. Doctor Access Forbidden Barrier: Doctors cannot chat other doctors!
+  if (isDoctorForbidden) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 flex items-center justify-center mx-auto">
+          <AlertTriangle className="w-8 h-8 text-amber-600" />
+        </div>
+        <h2 className="font-heading font-extrabold text-2xl text-slate-900">Physician Access Restricted</h2>
+        <p className="text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
+          Doctor accounts cannot initiate or participate in consultations with other doctors. Please use your Doctor Dashboard to manage your patient chat inquiries.
+        </p>
+        <Link
+          href="/doctor/dashboard"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs shadow-md shadow-teal-600/20 hover:bg-teal-700 transition-all"
+        >
+          <span>Open Doctor Dashboard</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
+    );
+  }
+
+  // 2. Loading state
+  if (loading || isAuthLoading) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-24 text-center space-y-4">
+        <div className="w-12 h-12 rounded-full border-4 border-teal-200 border-t-teal-600 animate-spin mx-auto" />
+        <p className="text-xs font-semibold text-slate-500">
+          Initializing encrypted clinical consultation channel...
+        </p>
+      </div>
+    );
+  }
+
+  // 3. User Authentication Barrier: Unauthenticated users CANNOT chat until signed up or signed in!
+  if (!user) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-16 sm:py-24 text-center space-y-6">
+        <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-200 text-teal-800 flex items-center justify-center mx-auto shadow-xs">
+          <Stethoscope className="w-8 h-8 text-teal-600" />
+        </div>
+        
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-1 text-[11px] font-bold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200">
+            <ShieldCheck className="w-3.5 h-3.5 text-teal-600" />
+            <span>HIPAA Secure Consultation</span>
+          </div>
+          <h1 className="font-heading font-extrabold text-2xl text-slate-900">
+            Sign In Required to Consult
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-sm mx-auto">
+            To protect your medical confidentiality and connect with {docName}, please sign in or register your patient account.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-3">
+          <Link
+            href={`/auth/login?redirect=/consultation/${consultationId}&reason=consultation`}
+            className="w-full py-3 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-teal-600/20 active:scale-98 transition-all"
+          >
+            <span>Sign In to Start Chat</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+
+          <Link
+            href={`/auth/signup?redirect=/consultation/${consultationId}&reason=consultation`}
+            className="w-full py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-heading font-bold text-xs flex items-center justify-center gap-2 active:scale-98 transition-all"
+          >
+            <span>Create Free Patient Account</span>
+          </Link>
+
+          <div className="pt-2 border-t border-slate-100">
+            <Link
+              href="/doctors"
+              className="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+            >
+              ← Return to Doctors Directory
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-[calc(100dvh-4rem)] sm:h-[calc(100dvh-5rem)] flex flex-col bg-slate-100 overflow-hidden">
       
@@ -479,52 +702,96 @@ export default function ConsultationChatRoomPage() {
       <header className="bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shrink-0 shadow-2xs z-10">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => router.push('/doctors')}
+            onClick={() => router.push(isDoctorView ? '/doctor/dashboard' : '/doctors')}
             className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-500 transition-colors"
             aria-label="Back"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
 
-          <div className="relative w-10 h-10 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center font-bold text-teal-800 text-sm overflow-hidden">
-            {docName.replace('Dr. ', '').charAt(0)}
-            <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
-          </div>
-
-          <div>
-            <div className="flex items-center gap-1.5">
-              <h2 className="font-heading font-bold text-sm text-slate-900 leading-tight">
-                {docName}
-              </h2>
-              <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-teal-700 bg-teal-50 px-1.5 py-0.2 rounded">
-                <ShieldCheck className="w-3 h-3" />
-                Verified
-              </span>
+          {isDoctorView ? (
+            /* Doctor's view of Patient */
+            <div className="flex items-center gap-3">
+              <div className="relative w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center font-heading font-bold text-sm overflow-hidden shrink-0">
+                {patientInfo?.name?.charAt(0) || 'P'}
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h2 className="font-heading font-bold text-sm text-slate-900 leading-tight">
+                    Patient: {patientInfo?.name || 'David K. (38)'}
+                  </h2>
+                  <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full uppercase">
+                    {patientInfo?.urgency || 'moderate'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-600 font-medium truncate max-w-xs sm:max-w-md">
+                  Symptoms: {patientInfo?.symptoms || 'Acute migraine and photophobia'}
+                </p>
+              </div>
             </div>
-            <p className="text-[11px] text-slate-600 font-medium">
-              {doctor?.specialty || 'General Practitioner'} • 🟢 Online Now
-            </p>
-          </div>
+          ) : (
+            /* Patient's view of Doctor */
+            <div className="flex items-center gap-3">
+              <div className="relative w-10 h-10 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center font-bold text-teal-800 text-sm overflow-hidden shrink-0">
+                {docName.replace('Dr. ', '').charAt(0)}
+                <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
+              </div>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <h2 className="font-heading font-bold text-sm text-slate-900 leading-tight">
+                    {docName}
+                  </h2>
+                  <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-teal-700 bg-teal-50 px-1.5 py-0.2 rounded">
+                    <ShieldCheck className="w-3 h-3" />
+                    Verified
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-600 font-medium">
+                  {doctor?.specialty || 'General Practitioner'} • 🟢 Online Now
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Doctor Actions & Call Simulators */}
         <div className="flex items-center gap-2">
-          {/* Doctor Mode Toggle (for demonstration) */}
-          <button
-            onClick={() => setIsPrescriptionModalOpen(true)}
-            className="px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 text-xs font-bold flex items-center gap-1.5 transition-colors"
-          >
-            <PlusCircle className="w-3.5 h-3.5 text-teal-600" />
-            <span className="hidden sm:inline">Issue Prescription</span>
-            <span className="sm:hidden">Rx</span>
-          </button>
+          {isDoctorView ? (
+            <>
+              <Link
+                href="/pharmacy"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold transition-colors"
+              >
+                <ShoppingBag className="w-3.5 h-3.5 text-teal-600" />
+                <span>Pharmacy formulary</span>
+              </Link>
+              <button
+                onClick={() => setIsPrescriptionModalOpen(true)}
+                className="px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm shadow-teal-600/20 active:scale-95"
+              >
+                <PlusCircle className="w-3.5 h-3.5" />
+                <span>Issue Prescription</span>
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/pharmacy"
+              className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors"
+            >
+              <ShoppingBag className="w-3.5 h-3.5 text-teal-600" />
+              <span className="hidden sm:inline">Pharmacy Store</span>
+              <span className="sm:hidden">Rx</span>
+            </Link>
+          )}
         </div>
       </header>
 
       {/* 2. CHAT STREAM / MESSAGES FEED */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
         {messages.map((msg) => {
-          const isMe = msg.sender_id === (user?.id || 'patient-user');
+          const isMe = isDoctorView
+            ? msg.sender_id === (user?.id || 'doctor-1') || msg.sender_id === (doctor?.profile_id || 'doctor-1')
+            : msg.sender_id === (user?.id || 'patient-user') || (msg.sender_id !== 'system' && msg.sender_id !== (doctor?.profile_id || 'doctor-1'));
           const isSystem = msg.message_type === 'system';
           const isPrescription = msg.message_type === 'prescription';
 
@@ -933,12 +1200,46 @@ export default function ConsultationChatRoomPage() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-800 uppercase mb-1">
-                  Prescribed Medication
+                  Select Formulary Medicine (CLINIC Pharmacy)
                 </label>
-                <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-2">
-                  <span className="font-bold text-slate-900">Amoxicillin 500mg Capsules</span>
+                <div className="grid grid-cols-2 gap-2 mb-2">
+                  {[
+                    { name: 'Amoxicillin 500mg', dosage: '500mg', freq: '3 times daily after meals', dur: '7 days', instr: 'Complete full course even if symptoms improve', price: 14.50, id: '1' },
+                    { name: 'Sumatriptan 50mg', dosage: '50mg', freq: '1 tablet at migraine onset', dur: 'As needed', instr: 'May repeat once after 2 hours if migraine persists. Max 100mg/24h', price: 28.00, id: '4' },
+                    { name: 'Ibuprofen 400mg', dosage: '400mg', freq: 'Every 8 hours with water', dur: '5 days', instr: 'Take after meals for acute pain and inflammation', price: 8.99, id: '2' },
+                    { name: 'Cetirizine 10mg', dosage: '10mg', freq: '1 tablet daily at bedtime', dur: '14 days', instr: 'Non-drowsy relief for acute allergic dermatitis or rhinitis', price: 11.20, id: '3' },
+                  ].map((med) => (
+                    <button
+                      key={med.id}
+                      type="button"
+                      onClick={() => setRxMedications([{
+                        name: med.name,
+                        dosage: med.dosage,
+                        frequency: med.freq,
+                        duration: med.dur,
+                        instructions: med.instr,
+                        pharmacy_product_id: med.id,
+                        price: med.price,
+                      }])}
+                      className={`p-2.5 rounded-xl text-left border text-xs transition-all ${
+                        rxMedications[0]?.name.includes(med.name.split(' ')[0])
+                          ? 'border-teal-600 bg-teal-50 text-teal-900 font-bold'
+                          : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300'
+                      }`}
+                    >
+                      <div className="truncate">{med.name}</div>
+                      <div className="text-[10px] text-teal-700 font-semibold">${med.price.toFixed(2)} • {med.dur}</div>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-1">
+                  <span className="font-bold text-slate-900 block">{rxMedications[0]?.name || 'Amoxicillin 500mg'}</span>
                   <p className="text-slate-600 text-[11px]">
-                    1 capsule 3 times daily for 7 days with food.
+                    <strong>Dosage:</strong> {rxMedications[0]?.dosage} • {rxMedications[0]?.frequency} for {rxMedications[0]?.duration}
+                  </p>
+                  <p className="text-slate-500 text-[10px] italic">
+                    {rxMedications[0]?.instructions}
                   </p>
                 </div>
               </div>

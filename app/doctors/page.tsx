@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { DoctorProfile } from '@/lib/types';
 import { supabase } from '@/lib/supabase/client';
+import { useAuth } from '@/lib/auth-context';
 import DoctorCard from '@/components/DoctorCard';
 import { 
   Search, 
@@ -11,13 +13,16 @@ import {
   ShieldCheck, 
   Sparkles, 
   Stethoscope, 
-  SlidersHorizontal 
+  SlidersHorizontal,
+  ArrowRight
 } from 'lucide-react';
 import SymptomTriageModal from '@/components/SymptomTriageModal';
 
 function DoctorsDirectoryContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const initialSpecialty = searchParams.get('specialty') || 'All';
+  const { profile, isLoading: isAuthLoading } = useAuth();
 
   const [doctors, setDoctors] = useState<DoctorProfile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +31,13 @@ function DoctorsDirectoryContent() {
   const [onlyOnline, setOnlyOnline] = useState(false);
   const [sortBy, setSortBy] = useState<'rating' | 'experience' | 'price_asc' | 'price_desc'>('rating');
   const [isTriageOpen, setIsTriageOpen] = useState(false);
+
+  // Doctors cannot view other doctors
+  useEffect(() => {
+    if (!isAuthLoading && profile?.role === 'doctor') {
+      router.replace('/doctor/dashboard');
+    }
+  }, [profile, isAuthLoading, router]);
 
   const categories = [
     'All',
@@ -116,6 +128,28 @@ function DoctorsDirectoryContent() {
 
     return docName.includes(query) || specialty.includes(query) || hospital.includes(query);
   });
+
+  // If logged in as doctor, display doctor redirection notice
+  if (!isAuthLoading && profile?.role === 'doctor') {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-200 text-teal-800 flex items-center justify-center mx-auto">
+          <Stethoscope className="w-8 h-8 text-teal-600" />
+        </div>
+        <h2 className="font-heading font-extrabold text-2xl text-slate-900">Physician Access Notice</h2>
+        <p className="text-sm text-slate-600">
+          Doctor accounts have their own dedicated practice view and cannot browse or consult other doctors. Redirecting to your Doctor Practice Portal...
+        </p>
+        <Link
+          href="/doctor/dashboard"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs shadow-md shadow-teal-600/20 hover:bg-teal-700 transition-all"
+        >
+          <span>Go to Doctor Practice Dashboard</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">

@@ -13,12 +13,16 @@ interface DoctorCardProps {
 
 export default function DoctorCard({ doctor }: DoctorCardProps) {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const docName = (doctor.profiles as any)?.full_name || 'Dr. Medical Specialist';
 
   const handleStartChat = () => {
     if (!user) {
-      router.push(`/auth/login?redirect=/consultation/${doctor.id}`);
+      router.push(`/auth/login?redirect=/consultation/${doctor.id}&reason=consultation`);
+      return;
+    }
+    if (profile?.role === 'doctor') {
+      router.push('/doctor/dashboard');
       return;
     }
     router.push(`/consultation/${doctor.id}`);

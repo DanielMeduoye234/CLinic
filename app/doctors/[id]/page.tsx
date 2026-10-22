@@ -23,11 +23,18 @@ import {
 export default function DoctorDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, profile, isLoading: isAuthLoading } = useAuth();
   const doctorId = params.id as string;
 
   const [doctor, setDoctor] = useState<DoctorProfile | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Doctors cannot view or book other doctors
+  useEffect(() => {
+    if (!isAuthLoading && profile?.role === 'doctor') {
+      router.replace('/doctor/dashboard');
+    }
+  }, [profile, isAuthLoading, router]);
 
   useEffect(() => {
     async function fetchDoctor() {
@@ -79,11 +86,35 @@ export default function DoctorDetailPage() {
 
   const handleStartConsultation = () => {
     if (!user) {
-      router.push(`/auth/login?redirect=/consultation/${doctorId}`);
+      router.push(`/auth/login?redirect=/consultation/${doctorId}&reason=consultation`);
+      return;
+    }
+    if (profile?.role === 'doctor') {
+      router.push('/doctor/dashboard');
       return;
     }
     router.push(`/consultation/${doctorId}`);
   };
+
+  if (!isAuthLoading && profile?.role === 'doctor') {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-200 text-teal-800 flex items-center justify-center mx-auto">
+          <Stethoscope className="w-8 h-8 text-teal-600" />
+        </div>
+        <h2 className="font-heading font-extrabold text-2xl text-slate-900">Physician Access Notice</h2>
+        <p className="text-sm text-slate-600">
+          You are signed in with a doctor account. Doctors cannot consult with or chat other doctors.
+        </p>
+        <Link
+          href="/doctor/dashboard"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs shadow-md shadow-teal-600/20 hover:bg-teal-700"
+        >
+          <span>Go to Doctor Practice Dashboard</span>
+        </Link>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

@@ -34,8 +34,10 @@ import DoctorCard from '@/components/DoctorCard';
 import ProductCard from '@/components/ProductCard';
 import { DoctorProfile, PharmacyProduct } from '@/lib/types';
 import { supabase } from '@/lib/supabase/client';
+import { useAuth } from '@/lib/auth-context';
 
 export default function HomePage() {
+  const { profile } = useAuth();
   const [isTriageOpen, setIsTriageOpen] = useState(false);
   const [quickSymptom, setQuickSymptom] = useState('');
   const [verifiedDoctors, setVerifiedDoctors] = useState<DoctorProfile[]>([]);
@@ -904,22 +906,62 @@ export default function HomePage() {
         <div className="flex items-end justify-between mb-3.5 sm:mb-6">
           <div>
             <span className="text-xs font-bold uppercase tracking-wider text-teal-700 font-heading">
-              Certified Medical Directory
+              {profile?.role === 'doctor' ? 'Physician Practice Portal' : 'Certified Medical Directory'}
             </span>
             <h2 className="font-heading font-extrabold text-lg sm:text-2xl text-slate-900 mt-0.5">
-              Verified Doctors Online
+              {profile?.role === 'doctor' ? 'Your Clinical Practice Hub' : 'Verified Doctors Online'}
             </h2>
           </div>
-          <Link
-            href="/doctors"
-            className="text-xs font-bold text-teal-700 hover:text-teal-800 flex items-center gap-1 group"
-          >
-            <span>Search All Specialists</span>
-            <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+          {profile?.role === 'doctor' ? (
+            <Link
+              href="/doctor/dashboard#patient-chats"
+              className="text-xs font-bold text-teal-700 hover:text-teal-800 flex items-center gap-1 group"
+            >
+              <span>View Patient Inquiries</span>
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          ) : (
+            <Link
+              href="/doctors"
+              className="text-xs font-bold text-teal-700 hover:text-teal-800 flex items-center gap-1 group"
+            >
+              <span>Search All Specialists</span>
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          )}
         </div>
 
-        {loadingDocs ? (
+        {profile?.role === 'doctor' ? (
+          <div className="p-6 sm:p-8 bg-gradient-to-r from-teal-50 via-slate-50 to-cyan-50 border border-teal-200/80 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xs">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-teal-600 text-white flex items-center justify-center font-heading font-extrabold text-xl shrink-0 shadow-sm shadow-teal-600/20">
+                <Stethoscope className="w-7 h-7" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-heading font-bold text-base text-slate-900">
+                    Physician Practice Management
+                  </h3>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800">
+                    Active Doctor Session
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600 max-w-xl">
+                  You are signed in as a certified practitioner. Access your live patient consultations, chat history, and digital prescription issuance in your dedicated doctor portal.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2.5 self-end sm:self-auto shrink-0">
+              <Link
+                href="/doctor/dashboard"
+                className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-sm active:scale-95 transition-all"
+              >
+                <span>Doctor Practice Dashboard</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        ) : loadingDocs ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="h-48 sm:h-56 rounded-2xl bg-slate-100 animate-pulse" />

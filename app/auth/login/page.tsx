@@ -96,6 +96,18 @@ function LoginContent() {
         </p>
       </div>
 
+      {searchParams.get('reason') === 'consultation' && (
+        <div className="p-4 bg-teal-50 border border-teal-200 rounded-2xl text-xs text-teal-800 space-y-1">
+          <div className="flex items-center gap-2 font-bold">
+            <Stethoscope className="w-4 h-4 text-teal-600 shrink-0" />
+            <span>Consultation Sign-In Required</span>
+          </div>
+          <p className="text-[11px] text-slate-600">
+            To ensure patient confidentiality and permanent clinical records, please sign in or register an account before chatting with the doctor.
+          </p>
+        </div>
+      )}
+
       {errorMessage && (
         <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-700 font-semibold flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
@@ -157,7 +169,10 @@ function LoginContent() {
 
         <p className="text-[11px] text-slate-500 text-center pt-2">
           Don&apos;t have an account yet?{' '}
-          <Link href="/auth/signup" className="text-teal-700 font-bold hover:underline">
+          <Link 
+            href={`/auth/signup${redirectUrl !== '/' ? `?redirect=${encodeURIComponent(redirectUrl)}${searchParams.get('reason') ? `&reason=${searchParams.get('reason')}` : ''}` : ''}`} 
+            className="text-teal-700 font-bold hover:underline"
+          >
             Create an Account
           </Link>
         </p>

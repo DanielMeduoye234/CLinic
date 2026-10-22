@@ -34,7 +34,7 @@ export default function SymptomTriageModal({
   initialSymptom = '',
 }: SymptomTriageModalProps) {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1); // 1: Description, 2: Severity, 3: Analyzing, 4: Result
   const [symptoms, setSymptoms] = useState(initialSymptom);
@@ -95,10 +95,16 @@ export default function SymptomTriageModal({
   };
 
   const handleStartConsultation = async (doctor: DoctorProfile) => {
-    // If not signed in, route to sign in with redirect
+    // If not signed in, route to sign in with consultation reason
     if (!user) {
       onClose();
-      router.push(`/auth/login?redirect=/consultation/new?doctorId=${doctor.id}&symptoms=${encodeURIComponent(symptoms)}`);
+      router.push(`/auth/login?redirect=/consultation/${doctor.id}&reason=consultation`);
+      return;
+    }
+
+    if (profile?.role === 'doctor') {
+      onClose();
+      router.push('/doctor/dashboard');
       return;
     }
 

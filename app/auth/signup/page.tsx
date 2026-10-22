@@ -55,7 +55,8 @@ function SignUpContent() {
       if (role === 'doctor') {
         router.push('/doctor/onboarding');
       } else {
-        router.push('/');
+        const redirectUrl = searchParams.get('redirect') || '/';
+        router.push(redirectUrl);
       }
     } catch (err: any) {
       console.error(err);
@@ -64,6 +65,8 @@ function SignUpContent() {
       setLoading(false);
     }
   };
+
+  const redirectUrl = searchParams.get('redirect') || '/';
 
   return (
     <div className="max-w-md mx-auto px-4 py-12 sm:py-16 space-y-6">
@@ -80,6 +83,18 @@ function SignUpContent() {
           Instant telemedicine, verified doctor consultations, and certified digital pharmacy.
         </p>
       </div>
+
+      {searchParams.get('reason') === 'consultation' && (
+        <div className="p-4 bg-teal-50 border border-teal-200 rounded-2xl text-xs text-teal-800 space-y-1">
+          <div className="flex items-center gap-2 font-bold">
+            <Stethoscope className="w-4 h-4 text-teal-600 shrink-0" />
+            <span>Consultation Registration</span>
+          </div>
+          <p className="text-[11px] text-slate-600">
+            Create your confidential patient profile to immediately start chatting with your doctor.
+          </p>
+        </div>
+      )}
 
       {errorMessage && (
         <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-700 font-semibold flex items-center gap-2">
@@ -196,7 +211,10 @@ function SignUpContent() {
 
         <p className="text-[11px] text-slate-500 text-center pt-2">
           Already have an account?{' '}
-          <Link href="/auth/login" className="text-teal-700 font-bold hover:underline">
+          <Link 
+            href={`/auth/login${redirectUrl !== '/' ? `?redirect=${encodeURIComponent(redirectUrl)}${searchParams.get('reason') ? `&reason=${searchParams.get('reason')}` : ''}` : ''}`} 
+            className="text-teal-700 font-bold hover:underline"
+          >
             Sign In
           </Link>
         </p>

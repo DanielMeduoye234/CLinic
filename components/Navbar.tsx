@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { useCart } from '@/lib/cart-context';
 import { 
@@ -20,11 +20,17 @@ import {
 } from 'lucide-react';
 
 export default function Navbar() {
+  const router = useRouter();
   const pathname = usePathname();
   const { user, profile, doctorProfile, signOut } = useAuth();
   const { totalItems, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/auth/logout');
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -49,7 +55,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-14 sm:h-16">
           
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href={profile?.role === 'doctor' ? '/doctor/dashboard' : '/'} className="flex items-center gap-2 group">
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-teal-600 flex items-center justify-center text-white shadow-sm shadow-teal-600/20 group-hover:bg-teal-700 transition-colors">
               <Stethoscope className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </div>
@@ -245,7 +251,7 @@ export default function Navbar() {
                     )}
 
                     <button
-                      onClick={signOut}
+                      onClick={handleSignOut}
                       className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-lg transition-colors text-left"
                     >
                       <LogOut className="w-4 h-4 text-rose-500" />
@@ -359,9 +365,9 @@ export default function Navbar() {
                     </div>
                   </div>
                   <button
-                    onClick={() => {
-                      signOut();
+                    onClick={async () => {
                       setMobileMenuOpen(false);
+                      await handleSignOut();
                     }}
                     className="p-2 rounded-xl text-rose-600 hover:bg-rose-50 text-xs font-bold flex items-center gap-1"
                   >
@@ -535,7 +541,7 @@ export default function Navbar() {
                   <Link
                     href="/auth/signup?role=doctor"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="px-3 py-1.5 rounded-lg bg-teal-600 text-white font-bold text-xs hover:bg-teal-700"
+                    className="px-3 py-1.5 rounded-lg bg-sky-500 text-white font-bold text-xs hover:bg-sky-600"
                   >
                     Join Practice
                   </Link>

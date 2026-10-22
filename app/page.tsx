@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, 
@@ -37,12 +38,34 @@ import { supabase } from '@/lib/supabase/client';
 import { useAuth } from '@/lib/auth-context';
 
 export default function HomePage() {
-  const { profile } = useAuth();
+  const router = useRouter();
+  const { profile, isLoading: isAuthLoading } = useAuth();
   const [isTriageOpen, setIsTriageOpen] = useState(false);
   const [quickSymptom, setQuickSymptom] = useState('');
   const [verifiedDoctors, setVerifiedDoctors] = useState<DoctorProfile[]>([]);
   const [pharmacyProducts, setPharmacyProducts] = useState<PharmacyProduct[]>([]);
   const [loadingDocs, setLoadingDocs] = useState(true);
+
+  // Requirement: Doctor should NOT have access to homepage; route straight to doctor dashboard
+  useEffect(() => {
+    if (!isAuthLoading && profile?.role === 'doctor') {
+      router.replace('/doctor/dashboard');
+    }
+  }, [profile, isAuthLoading, router]);
+
+  if (!isAuthLoading && profile?.role === 'doctor') {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 py-16 text-center space-y-4">
+        <div className="w-12 h-12 rounded-full border-4 border-sky-200 border-t-sky-600 animate-spin" />
+        <h2 className="font-heading font-extrabold text-xl text-slate-900">
+          Redirecting to Doctor Practice Dashboard...
+        </h2>
+        <p className="text-xs text-slate-500">
+          Physician accounts operate directly within the clinical practice portal.
+        </p>
+      </div>
+    );
+  }
 
   // Desktop Slider State
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -365,7 +388,7 @@ export default function HomePage() {
                     </div>
                     <button
                       onClick={() => setIsTriageOpen(true)}
-                      className="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-transform"
+                      className="w-full py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm shadow-sky-500/25 active:scale-95 transition-transform"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>Check Symptoms & Connect</span>
@@ -393,7 +416,7 @@ export default function HomePage() {
                 <div className="pt-2">
                   <Link
                     href={activeMobileSlide.ctaHref || '/doctors'}
-                    className="w-full py-3 px-4 rounded-xl bg-teal-600 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
+                    className="w-full py-3 px-4 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm shadow-sky-500/25 active:scale-95 transition-transform"
                   >
                     <span>{activeMobileSlide.ctaText}</span>
                     <ArrowRight className="w-4 h-4" />
@@ -653,7 +676,7 @@ export default function HomePage() {
                     {/* Primary Flagship Button */}
                     <button
                       onClick={() => setIsTriageOpen(true)}
-                      className="px-5 py-3 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-heading font-extrabold text-sm flex items-center justify-center gap-2 shrink-0 transition-all shadow-md shadow-teal-400/25 active:scale-95"
+                      className="px-5 py-3 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-heading font-extrabold text-sm flex items-center justify-center gap-2 shrink-0 transition-all shadow-md shadow-sky-400/25 active:scale-95"
                     >
                       <Sparkles className="w-4 h-4 text-slate-950" />
                       <span>Check Symptoms & Connect</span>
@@ -687,7 +710,7 @@ export default function HomePage() {
                   {activeSlide.primaryCta && (
                     <Link
                       href={activeSlide.primaryCta.href}
-                      className="px-5 py-3 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-heading font-extrabold text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-teal-400/25 active:scale-95"
+                      className="px-5 py-3 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-heading font-extrabold text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-sky-400/25 active:scale-95"
                     >
                       <span>{activeSlide.primaryCta.text}</span>
                       <ArrowRight className="w-4 h-4" />

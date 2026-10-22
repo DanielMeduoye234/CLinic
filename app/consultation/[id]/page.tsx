@@ -37,7 +37,9 @@ import {
   PlusCircle, 
   AlertTriangle,
   Stethoscope,
-  X
+  X,
+  Home,
+  LogOut
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -294,52 +296,28 @@ export default function ConsultationChatRoomPage() {
 
         const physicianName = (docData?.profiles as any)?.full_name || 'Dr. Medical Specialist';
 
-        // Initialize starter messages
-        const starterMessages: ChatMessage[] = [
-          {
-            id: 'msg-system-1',
-            consultation_id: consultationId,
-            sender_id: 'system',
-            message_type: 'system',
-            content: 'End-to-end encrypted medical consultation channel established. Your clinical privacy is protected under HIPAA guidelines.',
-            is_read: true,
-            created_at: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
-          },
-          {
-            id: 'msg-doc-1',
-            consultation_id: consultationId,
-            sender_id: docData?.profile_id || 'doctor-1',
-            message_type: 'text',
-            content: `Hello! I am Dr. ${physicianName.replace('Dr. ', '')}. I have reviewed your clinical symptom intake. I am here to help evaluate your condition and provide medical guidance. Could you tell me more about how long you've had these symptoms and if anything makes them better or worse?`,
-            is_read: true,
-            created_at: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
-          },
-        ];
+        // Query real messages from Supabase
+        const { data: realMessages } = await supabase
+          .from('messages')
+          .select('*')
+          .eq('consultation_id', consultationId)
+          .order('created_at', { ascending: true });
 
-        // If in doctor view for demo patient David K. or Elena R., add their initial symptom message:
-        if (consultationId === 'cons-1') {
-          starterMessages.push({
-            id: 'msg-patient-1',
-            consultation_id: consultationId,
-            sender_id: 'patient-david-k',
-            message_type: 'text',
-            content: 'Hello doctor, I have an acute throbbing migraine on my left temple with sensitivity to bright lights for the past 2 days. Over-the-counter paracetamol is not providing relief.',
-            is_read: true,
-            created_at: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
-          });
-        } else if (consultationId === 'cons-2') {
-          starterMessages.push({
-            id: 'msg-patient-2',
-            consultation_id: consultationId,
-            sender_id: 'patient-elena-r',
-            message_type: 'text',
-            content: 'Hi doctor! I have this itchy red contact dermatitis rash on my forearm after gardening yesterday. Could you review what soothing prescription might help?',
-            is_read: true,
-            created_at: new Date(Date.now() - 1000 * 60 * 6).toISOString(),
-          });
+        const systemNotice: ChatMessage = {
+          id: 'msg-system-1',
+          consultation_id: consultationId,
+          sender_id: 'system',
+          message_type: 'system',
+          content: 'End-to-end encrypted medical consultation channel established. Your clinical privacy is protected under HIPAA guidelines.',
+          is_read: true,
+          created_at: new Date().toISOString(),
+        };
+
+        if (realMessages && realMessages.length > 0) {
+          setMessages([systemNotice, ...(realMessages as ChatMessage[])]);
+        } else {
+          setMessages([systemNotice]);
         }
-
-        setMessages(starterMessages);
       } catch (err) {
         console.error('Error loading consultation:', err);
       } finally {
@@ -396,7 +374,19 @@ export default function ConsultationChatRoomPage() {
       payload: newMessage,
     });
 
-    // If sent by patient in patient view, simulate doctor clinical response with realistic typing
+    // Persist real message to Supabase
+    supabase.from('messages').insert({
+      consultation_id: consultationId,
+      sender_id: senderId,
+      message_type: 'text',
+      content: userText,
+      is_read: false
+    }).then(({ error }) => {
+      if (error) console.error('Error persisting message:', error);
+    });
+
+    /*
+    // COMMENTED OUT AS PER CLINICAL REQUIREMENT: Real licensed doctors conduct clinical evaluations directly without automated AI diagnoses.
     if (!isDoctorView) {
       setIsDoctorTyping(true);
       setTimeout(() => {
@@ -432,6 +422,7 @@ export default function ConsultationChatRoomPage() {
         });
       }, 1500);
     }
+    */
   };
 
   // Voice Note Recording (Web Audio API)
@@ -693,7 +684,8 @@ export default function ConsultationChatRoomPage() {
   }
 
   return (
-    <div className="h-[calc(100dvh-4rem)] sm:h-[calc(100dvh-5rem)] flex flex-col bg-slate-100 overflow-hidden">
+    <div className="max-w-6xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-6 mb-16 sm:mb-24">
+      <div className="h-[calc(100dvh-12rem)] min-h-[580px] max-h-[840px] rounded-3xl border border-slate-200/90 shadow-md bg-white overflow-hidden flex flex-col">
       
       {/* Hidden Audio Player instance */}
       <audio ref={audioPlayerRef} className="hidden" />
@@ -767,7 +759,7 @@ export default function ConsultationChatRoomPage() {
               </Link>
               <button
                 onClick={() => setIsPrescriptionModalOpen(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm shadow-teal-600/20 active:scale-95"
+                className="px-3.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm shadow-sky-500/20 active:scale-95"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
                 <span>Issue Prescription</span>
@@ -783,6 +775,24 @@ export default function ConsultationChatRoomPage() {
               <span className="sm:hidden">Rx</span>
             </Link>
           )}
+
+          <div className="h-4 w-px bg-slate-200 mx-0.5 hidden sm:block" />
+
+          <Link
+            href="/"
+            className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+            title="Return to Homepage"
+          >
+            <Home className="w-4 h-4" />
+          </Link>
+
+          <Link
+            href="/auth/logout"
+            className="p-1.5 rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors"
+            title="Sign Out"
+          >
+            <LogOut className="w-4 h-4" />
+          </Link>
         </div>
       </header>
 
@@ -1065,7 +1075,7 @@ export default function ConsultationChatRoomPage() {
               </button>
               <button
                 onClick={stopRecording}
-                className="px-4 py-2 rounded-xl bg-teal-600 text-white font-bold text-xs flex items-center gap-1 shadow-xs"
+                className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs flex items-center gap-1 shadow-xs"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Send Audio</span>
@@ -1119,14 +1129,14 @@ export default function ConsultationChatRoomPage() {
                 if (e.key === 'Enter') handleSendMessage();
               }}
               placeholder="Type your message, symptom questions, or updates..."
-              className="flex-1 px-4 py-3 bg-slate-100 border border-slate-200/80 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 focus:bg-white transition-all"
+              className="min-w-0 flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 border border-slate-200/80 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 focus:bg-white transition-all"
             />
 
             {/* Voice Note Trigger or Send Message */}
             {inputText.trim() ? (
               <button
                 onClick={handleSendMessage}
-                className="p-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white shadow-sm shadow-teal-600/20 active:scale-95 transition-all"
+                className="p-3 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white shadow-sm shadow-sky-500/20 active:scale-95 transition-all"
                 aria-label="Send Message"
               >
                 <Send className="w-5 h-5" />
@@ -1134,7 +1144,7 @@ export default function ConsultationChatRoomPage() {
             ) : (
               <button
                 onClick={startRecording}
-                className="p-3 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200/80 active:scale-95 transition-all"
+                className="p-3 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-600 border border-sky-200/80 active:scale-95 transition-all"
                 aria-label="Record Voice Note"
               >
                 <Mic className="w-5 h-5" />
@@ -1254,7 +1264,7 @@ export default function ConsultationChatRoomPage() {
               </button>
               <button
                 onClick={handleIssuePrescription}
-                className="flex-1 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold shadow-sm"
+                className="flex-1 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-xs font-bold shadow-sm shadow-sky-500/20"
               >
                 Sign & Transmit to Chat
               </button>
@@ -1263,6 +1273,7 @@ export default function ConsultationChatRoomPage() {
         </div>
       )}
 
+      </div>
     </div>
   );
 }

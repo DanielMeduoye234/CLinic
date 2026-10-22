@@ -22,7 +22,8 @@ import {
   Filter,
   AlertCircle,
   FileText,
-  ArrowRight
+  ArrowRight,
+  LogOut
 } from 'lucide-react';
 
 interface PatientChatThread {
@@ -53,94 +54,64 @@ export default function DoctorDashboardPage() {
     }
   }, [user, profile, isAuthLoading, router]);
 
-  // Fetch real consultations from Supabase + fallback demo records
+  // Synchronize doctor online status from doctorProfile
+  useEffect(() => {
+    if (doctorProfile) {
+      setIsOnline(Boolean(doctorProfile.is_online));
+    }
+  }, [doctorProfile]);
+
+  // Fetch real consultations from Supabase for this doctor (no dummy records)
   useEffect(() => {
     async function loadDoctorChats() {
+      if (!doctorProfile?.id) {
+        setConsultationsList([]);
+        setLoadingChats(false);
+        return;
+      }
+
       setLoadingChats(true);
       try {
-        const initialChats: PatientChatThread[] = [
-          {
-            id: 'cons-1',
-            patientName: 'David K. (38)',
-            symptoms: 'Acute throbbing migraine on left temple with photophobia for 2 days.',
-            urgency: 'moderate',
-            time: '5 mins ago',
-            lastMessage: 'Over-the-counter paracetamol is not providing relief.',
-            status: 'active',
-            unreadCount: 1,
-          },
-          {
-            id: 'cons-2',
-            patientName: 'Elena R. (29)',
-            symptoms: 'Itchy contact dermatitis rash on forearm after gardening.',
-            urgency: 'routine',
-            time: '18 mins ago',
-            lastMessage: 'Could you review what soothing prescription might help?',
-            status: 'active',
-            unreadCount: 0,
-          },
-          {
-            id: 'cons-past-1',
-            patientName: 'Marcus Bennett (52)',
-            symptoms: 'Follow-up regarding blood pressure maintenance & ACE inhibitor tolerance.',
-            urgency: 'routine',
-            time: 'Yesterday',
-            lastMessage: 'Prescription for Lisinopril received and delivered by pharmacy. Thank you doctor!',
-            status: 'completed',
-            unreadCount: 0,
-          },
-          {
-            id: 'cons-past-2',
-            patientName: 'Sarah Lin (24)',
-            symptoms: 'High fever (102°F) accompanied by persistent dry cough.',
-            urgency: 'urgent',
-            time: '2 days ago',
-            lastMessage: 'Completed antibiotic course. Fever has resolved completely.',
-            status: 'completed',
-            unreadCount: 0,
-          },
-        ];
+        const { data: realCons, error } = await supabase
+          .from('consultations')
+          .select(`
+            id,
+            patient_id,
+            raw_symptoms,
+            ai_urgency,
+            status,
+            created_at,
+            profiles:patient_id (
+              full_name
+            )
+          `)
+          .eq('doctor_id', doctorProfile.id)
+          .order('created_at', { ascending: false });
 
-        // Query real consultations from Supabase if doctorProfile exists
-        if (doctorProfile?.id) {
-          const { data: realCons, error } = await supabase
-            .from('consultations')
-            .select(`
-              id,
-              patient_id,
-              raw_symptoms,
-              ai_urgency,
-              status,
-              created_at,
-              profiles:patient_id (
-                full_name
-              )
-            `)
-            .eq('doctor_id', doctorProfile.id)
-            .order('created_at', { ascending: false });
+        if (!error && realCons) {
+          const mapped: PatientChatThread[] = realCons.map((item: any) => ({
+            id: item.id,
+            patientName: item.profiles?.full_name || 'Patient Inquirer',
+            symptoms: item.raw_symptoms || 'General teleconsultation clinical inquiry',
+            urgency: item.ai_urgency || 'routine',
+            time: new Date(item.created_at).toLocaleDateString([], {
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            }),
+            lastMessage: 'Patient consultation initiated.',
+            status: item.status === 'completed' ? 'completed' : 'active',
+            unreadCount: 0,
+          }));
 
-          if (!error && realCons && realCons.length > 0) {
-            const mapped: PatientChatThread[] = realCons.map((item: any) => ({
-              id: item.id,
-              patientName: item.profiles?.full_name || 'Patient Inquirer',
-              symptoms: item.raw_symptoms || 'General clinical consultation inquiry',
-              urgency: item.ai_urgency || 'routine',
-              time: 'Recent',
-              lastMessage: 'Patient initiated consultation inquiry.',
-              status: item.status === 'completed' ? 'completed' : 'active',
-              unreadCount: 0,
-            }));
-
-            // Combine real records with defaults
-            setConsultationsList([...mapped, ...initialChats.filter(c => !mapped.some(m => m.id === c.id))]);
-          } else {
-            setConsultationsList(initialChats);
-          }
+          setConsultationsList(mapped);
         } else {
-          setConsultationsList(initialChats);
+          setConsultationsList([]);
         }
       } catch (e) {
         console.error('Error loading consultations:', e);
+        setConsultationsList([]);
       } finally {
         setLoadingChats(false);
       }
@@ -158,14 +129,20 @@ export default function DoctorDashboardPage() {
     setIsOnline(newStatus);
 
     try {
-      await supabase
+      const { error } = await supabase
         .from('doctor_profiles')
         .update({ is_online: newStatus })
         .eq('id', doctorProfile.id);
 
-      await refreshProfile();
+      if (error) {
+        console.error('Error updating doctor online status:', error);
+        setIsOnline(!newStatus);
+      } else {
+        await refreshProfile();
+      }
     } catch (e) {
       console.error(e);
+      setIsOnline(!newStatus);
     } finally {
       setUpdating(false);
     }
@@ -221,21 +198,32 @@ export default function DoctorDashboardPage() {
           </div>
         </div>
 
-        {/* Online Status Toggle */}
-        <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-200/80 self-end sm:self-auto">
-          <span className="text-xs font-bold text-slate-700 pl-2">Teleconsult Availability:</span>
-          <button
-            onClick={toggleOnlineStatus}
-            disabled={updating}
-            className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
-              isOnline
-                ? 'bg-emerald-600 text-white shadow-xs'
-                : 'bg-slate-200 text-slate-600'
-            }`}
+        {/* Online Status Toggle & Shift Sign Out */}
+        <div className="flex items-center gap-3 self-end sm:self-auto flex-wrap">
+          <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-200/80">
+            <span className="text-xs font-bold text-slate-700 pl-2">Teleconsult Availability:</span>
+            <button
+              onClick={toggleOnlineStatus}
+              disabled={updating}
+              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                isOnline
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-white animate-pulse' : 'bg-slate-400'}`} />
+              <span>{updating ? 'Updating...' : isOnline ? 'Online (Accepting Patients)' : 'Offline / Away'}</span>
+            </button>
+          </div>
+
+          <Link
+            href="/auth/logout"
+            className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl text-xs font-bold text-rose-600 bg-rose-50/80 hover:bg-rose-100 border border-rose-200 transition-colors shadow-2xs"
+            title="End shift and sign out"
           >
-            <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-white animate-pulse' : 'bg-slate-400'}`} />
-            <span>{isOnline ? 'Accepting Patients Online' : 'Offline / Away'}</span>
-          </button>
+            <LogOut className="w-3.5 h-3.5 text-rose-500" />
+            <span>Sign Out</span>
+          </Link>
         </div>
       </div>
 
@@ -429,7 +417,7 @@ export default function DoctorDashboardPage() {
                 <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
                   <Link
                     href={`/consultation/${item.id}`}
-                    className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm shadow-teal-600/20 active:scale-95 transition-all"
+                    className="px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm shadow-sky-500/20 active:scale-95 transition-all"
                   >
                     <MessageSquare className="w-3.5 h-3.5" />
                     <span>{item.status === 'completed' ? 'Review Transcript' : 'Open Consultation Room'}</span>

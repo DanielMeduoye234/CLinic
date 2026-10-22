@@ -241,9 +241,9 @@ export default function SymptomTriageModal({
                       setErrorMessage('');
                       setStep(2);
                     }}
-                    className="w-full py-3.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-teal-600/20"
+                    className="w-full py-3.5 px-4 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-sky-500/20"
                   >
-                    <span>Continue to Severity Check</span>
+                    <span>Continue to Specialist Match</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -310,10 +310,10 @@ export default function SymptomTriageModal({
                   <button
                     type="button"
                     onClick={handleStartAnalysis}
-                    className="w-2/3 py-3 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-teal-600/20"
+                    className="w-2/3 py-3 px-4 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-sky-500/20"
                   >
                     <Sparkles className="w-4 h-4" />
-                    <span>Run AI Triage & Match</span>
+                    <span>Match with Verified Doctors</span>
                   </button>
                 </div>
               </div>
@@ -377,7 +377,8 @@ export default function SymptomTriageModal({
                   </div>
                 ) : (
                   <>
-                    {/* Triage Insight Card */}
+                    {/* 
+                    // COMMENTED OUT AS PER CLINICAL REQUIREMENT: AI automated diagnosis removed so licensed physicians perform direct diagnosis.
                     <div className="p-4 bg-teal-50/70 border border-teal-200/80 rounded-2xl space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-bold uppercase tracking-wider text-teal-800 bg-teal-100/80 px-2.5 py-0.5 rounded-full">
@@ -389,6 +390,17 @@ export default function SymptomTriageModal({
                       </div>
                       <p className="text-xs text-slate-700 leading-relaxed">
                         {triageResult.patient_friendly_summary}
+                      </p>
+                    </div>
+                    */}
+                    <div className="p-4 bg-sky-50 border border-sky-200/80 rounded-2xl space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-sky-800 bg-sky-100 px-2.5 py-0.5 rounded-full">
+                          Recommended Specialty: {triageResult.primary_specialty}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-700 leading-relaxed">
+                        Connect with one of our licensed, board-certified physicians below to receive your personalized clinical evaluation and medical care.
                       </p>
                     </div>
 
@@ -408,7 +420,7 @@ export default function SymptomTriageModal({
                               onClose();
                               router.push('/doctors');
                             }}
-                            className="px-4 py-2 rounded-xl bg-teal-600 text-white text-xs font-bold hover:bg-teal-700"
+                            className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold transition-colors"
                           >
                             Browse All Verified Doctors
                           </button>
@@ -455,7 +467,7 @@ export default function SymptomTriageModal({
                                   </span>
                                   <button
                                     onClick={() => handleStartConsultation(doc)}
-                                    className="px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex items-center gap-1 shadow-sm shadow-teal-600/20 active:scale-95 transition-all"
+                                    className="px-3.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-bold text-xs flex items-center gap-1 shadow-sm shadow-sky-500/20 active:scale-95 transition-all"
                                   >
                                     <MessageSquare className="w-3 h-3" />
                                     <span>Start Chat</span>

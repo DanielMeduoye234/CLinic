@@ -55,8 +55,12 @@ function SignUpContent() {
       if (role === 'doctor') {
         router.push('/doctor/onboarding');
       } else {
-        const redirectUrl = searchParams.get('redirect') || '/';
-        router.push(redirectUrl);
+        const redirectUrl = searchParams.get('redirect');
+        if (redirectUrl && redirectUrl !== '/') {
+          router.push(redirectUrl);
+        } else {
+          router.push('/patient/consultations');
+        }
       }
     } catch (err: any) {
       console.error(err);
@@ -197,7 +201,7 @@ function SignUpContent() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-teal-600/20 active:scale-99 transition-all cursor-pointer"
+          className="w-full py-3 px-4 rounded-xl bg-sky-500 hover:bg-sky-600 disabled:opacity-50 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-sky-500/20 active:scale-99 transition-all cursor-pointer"
         >
           {loading ? (
             <span>Creating Account...</span>

@@ -108,7 +108,7 @@ export default function DoctorCard({ doctor }: DoctorCardProps) {
           </Link>
           <button
             onClick={handleStartChat}
-            className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm shadow-teal-600/20 active:scale-95 transition-all"
+            className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm shadow-sky-500/20 active:scale-95 transition-all"
           >
             <MessageSquare className="w-3.5 h-3.5" />
             <span>Chat Now</span>

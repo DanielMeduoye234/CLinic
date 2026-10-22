@@ -142,7 +142,7 @@ function DoctorsDirectoryContent() {
         </p>
         <Link
           href="/doctor/dashboard"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs shadow-md shadow-teal-600/20 hover:bg-teal-700 transition-all"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs shadow-md shadow-sky-500/20 transition-all"
         >
           <span>Go to Doctor Practice Dashboard</span>
           <ArrowRight className="w-4 h-4" />

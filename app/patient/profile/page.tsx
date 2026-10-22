@@ -13,7 +13,8 @@ import {
   Plus, 
   X,
   Phone,
-  AlertCircle
+  AlertCircle,
+  LogOut
 } from 'lucide-react';
 
 export default function PatientProfilePage() {
@@ -76,12 +77,21 @@ export default function PatientProfilePage() {
           </p>
         </div>
 
-        <Link
-          href="/doctors"
-          className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-sm shadow-teal-600/20"
-        >
-          Consult Doctor
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/auth/logout"
+            className="px-3.5 py-2 rounded-xl text-rose-600 bg-rose-50/80 hover:bg-rose-100 border border-rose-200 font-bold text-xs flex items-center gap-1.5 transition-colors"
+          >
+            <LogOut className="w-3.5 h-3.5 text-rose-500" />
+            <span>Sign Out</span>
+          </Link>
+          <Link
+            href="/doctors"
+            className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-bold text-xs shadow-sm shadow-sky-500/20 transition-all"
+          >
+            Consult Doctor
+          </Link>
+        </div>
       </div>
 
       {savedMessage && (

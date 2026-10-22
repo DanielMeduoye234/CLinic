@@ -71,7 +71,12 @@ function LoginContent() {
         }
       }
 
-      router.push(redirectUrl);
+      // Patient sign in: Lead straight to my consultation page or specific redirect
+      if (redirectUrl && redirectUrl !== '/') {
+        router.push(redirectUrl);
+      } else {
+        router.push('/patient/consultations');
+      }
     } catch (err: any) {
       console.error(err);
       setErrorMessage(err.message || 'Invalid email or password.');
@@ -155,7 +160,7 @@ function LoginContent() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-teal-600/20 active:scale-99 transition-all cursor-pointer"
+          className="w-full py-3 px-4 rounded-xl bg-sky-500 hover:bg-sky-600 disabled:opacity-50 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-sky-500/20 active:scale-99 transition-all cursor-pointer"
         >
           {loading ? (
             <span>Signing in...</span>

@@ -165,7 +165,7 @@ export default function PatientConsultationsPage() {
                   <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${
                     c.status === 'completed'
                       ? 'bg-slate-100 text-slate-600 border-slate-200'
-                      : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                      : 'bg-sky-50 text-sky-800 border-sky-200'
                   }`}>
                     {c.status}
                   </span>

@@ -65,8 +65,8 @@ export default function PatientProfilePage() {
       {/* Header */}
       <div className="flex items-center justify-between pb-6 border-b border-slate-200">
         <div>
-          <div className="flex items-center gap-1.5 text-teal-700 text-xs font-bold uppercase tracking-wider font-heading mb-1">
-            <ShieldCheck className="w-4 h-4 text-teal-600" />
+          <div className="flex items-center gap-1.5 text-sky-700 text-xs font-bold uppercase tracking-wider font-heading mb-1">
+            <ShieldCheck className="w-4 h-4 text-sky-600" />
             <span>Encrypted Health Record</span>
           </div>
           <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-slate-900">
@@ -95,14 +95,14 @@ export default function PatientProfilePage() {
       </div>
 
       {savedMessage && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs font-semibold text-emerald-800">
+        <div className="p-4 bg-sky-50 border border-sky-200 rounded-2xl text-xs font-semibold text-sky-800">
           ✓ Medical vault updated and encrypted successfully.
         </div>
       )}
 
       {/* Profile Info Card */}
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-xs flex items-center gap-5">
-        <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-100 text-teal-800 font-heading font-bold text-2xl flex items-center justify-center shrink-0">
+        <div className="w-16 h-16 rounded-2xl bg-sky-50 border border-sky-100 text-sky-800 font-heading font-bold text-2xl flex items-center justify-center shrink-0">
           {profile?.full_name?.charAt(0) || user?.email?.charAt(0).toUpperCase() || 'P'}
         </div>
         <div>
@@ -134,7 +134,7 @@ export default function PatientProfilePage() {
               <select
                 value={bloodGroup}
                 onChange={(e) => setBloodGroup(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-teal-600 focus:outline-none"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-600 focus:outline-none"
               >
                 {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map((bg) => (
                   <option key={bg} value={bg}>{bg}</option>
@@ -150,7 +150,7 @@ export default function PatientProfilePage() {
                 type="text"
                 value={emergencyContact.name}
                 onChange={(e) => setEmergencyContact({ ...emergencyContact, name: e.target.value })}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-teal-600 focus:outline-none"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-600 focus:outline-none"
               />
             </div>
 
@@ -162,7 +162,7 @@ export default function PatientProfilePage() {
                 type="text"
                 value={emergencyContact.phone}
                 onChange={(e) => setEmergencyContact({ ...emergencyContact, phone: e.target.value })}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-teal-600 focus:outline-none"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-600 focus:outline-none"
               />
             </div>
           </div>
@@ -199,7 +199,7 @@ export default function PatientProfilePage() {
               value={newAllergy}
               onChange={(e) => setNewAllergy(e.target.value)}
               placeholder="Add allergy (e.g. Sulfa, Latex)"
-              className="flex-1 px-3 py-2 border border-slate-200 rounded-xl text-xs focus:border-teal-600 focus:outline-none"
+              className="flex-1 px-3 py-2 border border-slate-200 rounded-xl text-xs focus:border-sky-600 focus:outline-none"
             />
             <button
               type="button"
@@ -214,7 +214,7 @@ export default function PatientProfilePage() {
         {/* Chronic Conditions */}
         <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 space-y-4">
           <h3 className="font-heading font-bold text-base text-slate-900 pb-2 border-b border-slate-100 flex items-center gap-2">
-            <Activity className="w-4 h-4 text-teal-600" />
+            <Activity className="w-4 h-4 text-sky-600" />
             <span>Pre-existing / Chronic Conditions</span>
           </h3>
 
@@ -222,7 +222,7 @@ export default function PatientProfilePage() {
             {chronicConditions.map((cond) => (
               <span
                 key={cond}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 text-teal-900 border border-teal-200 text-xs font-semibold"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 text-sky-900 border border-sky-200 text-xs font-semibold"
               >
                 <span>{cond}</span>
                 <button
@@ -242,7 +242,7 @@ export default function PatientProfilePage() {
               value={newCondition}
               onChange={(e) => setNewCondition(e.target.value)}
               placeholder="Add condition (e.g. Hypertension)"
-              className="flex-1 px-3 py-2 border border-slate-200 rounded-xl text-xs focus:border-teal-600 focus:outline-none"
+              className="flex-1 px-3 py-2 border border-slate-200 rounded-xl text-xs focus:border-sky-600 focus:outline-none"
             />
             <button
               type="button"
@@ -256,7 +256,7 @@ export default function PatientProfilePage() {
 
         <button
           type="submit"
-          className="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xs shadow-md shadow-teal-600/20 active:scale-95 transition-all cursor-pointer"
+          className="px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-heading font-bold text-xs shadow-md shadow-sky-600/20 active:scale-95 transition-all cursor-pointer"
         >
           Save Encrypted Vault
         </button>

@@ -83,11 +83,11 @@ export default function OrderTrackingPage() {
       
       {/* Success Banner */}
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 text-center space-y-4 shadow-sm">
-        <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
+        <div className="w-16 h-16 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center mx-auto">
           <CheckCircle2 className="w-8 h-8" />
         </div>
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 font-heading">
+          <span className="text-xs font-bold uppercase tracking-wider text-sky-700 font-heading">
             Order Confirmed & Authorized
           </span>
           <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-slate-900 mt-1">
@@ -103,7 +103,7 @@ export default function OrderTrackingPage() {
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-6">
         <h3 className="font-heading font-bold text-base text-slate-900 pb-3 border-b border-slate-100 flex items-center justify-between">
           <span>Live Prescription Fulfillment Stepper</span>
-          <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
+          <span className="text-xs font-semibold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-full">
             ● In Progress
           </span>
         </h3>
@@ -114,7 +114,7 @@ export default function OrderTrackingPage() {
               {idx < steps.length - 1 && (
                 <div
                   className={`absolute left-4 top-8 -bottom-2 w-0.5 ${
-                    step.done ? 'bg-emerald-500' : 'bg-slate-200'
+                    step.done ? 'bg-sky-500' : 'bg-slate-200'
                   }`}
                 />
               )}
@@ -122,7 +122,7 @@ export default function OrderTrackingPage() {
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 z-10 ${
                   step.done
-                    ? 'bg-emerald-600 text-white'
+                    ? 'bg-sky-600 text-white'
                     : step.current
                     ? 'bg-amber-500 text-white animate-pulse'
                     : 'bg-slate-100 text-slate-400'
@@ -163,7 +163,7 @@ export default function OrderTrackingPage() {
               <span className="block text-[10px] uppercase font-bold text-slate-600 mb-1">
                 Delivery Priority
               </span>
-              <p className="font-bold text-teal-800 capitalize">
+              <p className="font-bold text-sky-800 capitalize">
                 {order.deliverySpeed === 'express' ? 'Urgent 2-Hour Medical Courier' : 'Standard Delivery (1-2 Days)'}
               </p>
             </div>
@@ -190,7 +190,7 @@ export default function OrderTrackingPage() {
 
           <div className="pt-2 flex justify-between items-center text-sm">
             <span className="font-heading font-bold text-slate-900">Total Charged</span>
-            <span className="font-heading font-extrabold text-xl text-teal-800">
+            <span className="font-heading font-extrabold text-xl text-sky-800">
               ${Number(order.totalAmount || 38.99).toFixed(2)}
             </span>
           </div>
@@ -207,7 +207,7 @@ export default function OrderTrackingPage() {
         </Link>
         <Link
           href="/doctors"
-          className="w-full sm:w-auto px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs text-center shadow-md shadow-teal-600/20"
+          className="w-full sm:w-auto px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs text-center shadow-md shadow-sky-600/20"
         >
           Consult Another Specialist
         </Link>

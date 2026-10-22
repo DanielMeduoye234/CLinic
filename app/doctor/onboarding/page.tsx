@@ -154,7 +154,7 @@ export default function DoctorOnboardingPage() {
   if (isSubmitted || (doctorProfile && !doctorProfile.is_verified)) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 sm:py-24">
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 text-center shadow-lg shadow-teal-700/5 space-y-6">
+        <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-10 text-center shadow-lg shadow-sky-700/5 space-y-6">
           
           <div className="w-16 h-16 rounded-3xl bg-amber-50 border border-amber-200/80 text-amber-600 flex items-center justify-center mx-auto">
             <Clock className="w-8 h-8 animate-pulse" />
@@ -187,7 +187,7 @@ export default function DoctorOnboardingPage() {
             </div>
             <div className="flex justify-between py-1">
               <span className="text-slate-600">Notification Channel:</span>
-              <span className="font-bold text-teal-700">Resend Email ({profile?.email})</span>
+              <span className="font-bold text-sky-700">Resend Email ({profile?.email})</span>
             </div>
           </div>
 
@@ -200,7 +200,7 @@ export default function DoctorOnboardingPage() {
             </button>
             <button
               onClick={() => router.push('/admin')}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md shadow-teal-600/20"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-md shadow-sky-600/20"
             >
               Open Admin Portal (Review Queue)
             </button>
@@ -216,8 +216,8 @@ export default function DoctorOnboardingPage() {
       
       {/* Header */}
       <div className="text-center space-y-2 max-w-xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold">
-          <ShieldCheck className="w-4 h-4 text-teal-600" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-sky-800 text-xs font-bold">
+          <ShieldCheck className="w-4 h-4 text-sky-600" />
           <span>CLINIC Medical Credentialing</span>
         </div>
         <h1 className="font-heading font-extrabold text-2xl sm:text-4xl text-slate-900 tracking-tight">
@@ -247,7 +247,7 @@ export default function DoctorOnboardingPage() {
             <select
               value={specialty}
               onChange={(e) => setSpecialty(e.target.value)}
-              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 cursor-pointer"
+              className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600 cursor-pointer"
             >
               {specialties.map((s) => (
                 <option key={s} value={s}>{s}</option>
@@ -264,7 +264,7 @@ export default function DoctorOnboardingPage() {
               value={subSpecialties}
               onChange={(e) => setSubSpecialties(e.target.value)}
               placeholder="e.g. Pediatric Dermatology, Acne"
-              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
             />
           </div>
         </div>
@@ -281,7 +281,7 @@ export default function DoctorOnboardingPage() {
               value={licenseNumber}
               onChange={(e) => setLicenseNumber(e.target.value)}
               placeholder="e.g. MED-LIC-2024-88934"
-              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
             />
           </div>
 
@@ -290,7 +290,7 @@ export default function DoctorOnboardingPage() {
             <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider mb-2 font-heading">
               Upload Medical License Certificate (PDF or Image) *
             </label>
-            <div className="border-2 border-dashed border-slate-200 hover:border-teal-500 rounded-2xl p-6 text-center cursor-pointer transition-colors relative bg-slate-50/50">
+            <div className="border-2 border-dashed border-slate-200 hover:border-sky-500 rounded-2xl p-6 text-center cursor-pointer transition-colors relative bg-slate-50/50">
               <input
                 type="file"
                 accept=".pdf,image/png,image/jpeg,image/webp"
@@ -298,12 +298,12 @@ export default function DoctorOnboardingPage() {
                 className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
               />
               <div className="flex flex-col items-center justify-center space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
                   <UploadCloud className="w-5 h-5" />
                 </div>
                 {licenseFile ? (
-                  <div className="flex items-center gap-2 text-xs font-bold text-teal-700">
-                    <FileCheck className="w-4 h-4 text-teal-600" />
+                  <div className="flex items-center gap-2 text-xs font-bold text-sky-700">
+                    <FileCheck className="w-4 h-4 text-sky-600" />
                     <span>{licenseFile.name} ({(licenseFile.size / 1024 / 1024).toFixed(2)} MB)</span>
                   </div>
                 ) : (
@@ -317,7 +317,7 @@ export default function DoctorOnboardingPage() {
                   </>
                 )}
                 {uploading && (
-                  <span className="text-[11px] text-teal-600 font-bold animate-pulse">
+                  <span className="text-[11px] text-sky-600 font-bold animate-pulse">
                     Uploading document securely...
                   </span>
                 )}
@@ -337,7 +337,7 @@ export default function DoctorOnboardingPage() {
               value={hospitalAffiliation}
               onChange={(e) => setHospitalAffiliation(e.target.value)}
               placeholder="e.g. Johns Hopkins, Mount Sinai"
-              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+              className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
             />
           </div>
 
@@ -351,7 +351,7 @@ export default function DoctorOnboardingPage() {
                 min={0}
                 value={yearsExperience}
                 onChange={(e) => setYearsExperience(e.target.value)}
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
               />
             </div>
             <div>
@@ -363,7 +363,7 @@ export default function DoctorOnboardingPage() {
                 min={0}
                 value={consultationFee}
                 onChange={(e) => setConsultationFee(e.target.value)}
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
               />
             </div>
           </div>
@@ -379,7 +379,7 @@ export default function DoctorOnboardingPage() {
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             placeholder="Share your medical background, certifications, and approach to digital telemedicine care..."
-            className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 resize-none"
+            className="w-full px-4 py-3 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600 resize-none"
           />
         </div>
 
@@ -387,7 +387,7 @@ export default function DoctorOnboardingPage() {
         <button
           type="submit"
           disabled={submitting || uploading}
-          className="w-full py-3.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-teal-600/25 active:scale-99 transition-all cursor-pointer"
+          className="w-full py-3.5 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-sky-600/25 active:scale-99 transition-all cursor-pointer"
         >
           {submitting ? (
             <span>Submitting Credentials...</span>

@@ -6,9 +6,10 @@
     --font-jakarta: 'Plus Jakarta Sans', sans-serif;
 
     /* Healthcare Clinical Palette */
-    --color-clinic-teal: #0D9488;
-    --color-clinic-teal-dark: #0F766E;
-    --color-clinic-teal-light: #F0FDFA;
+    --color-clinic-teal: #0ea5e9;
+    --color-clinic-sky: #0ea5e9;
+    --color-clinic-sky-dark: #0284c7;
+    --color-clinic-sky-light: #f0f9ff;
     --color-clinic-sky: #0284C7;
   }
 

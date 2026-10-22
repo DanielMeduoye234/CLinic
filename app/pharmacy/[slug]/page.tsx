@@ -75,7 +75,7 @@ export default function SingleProductPage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <div className="w-10 h-10 rounded-full border-4 border-teal-200 border-t-teal-600 animate-spin mx-auto mb-3" />
+        <div className="w-10 h-10 rounded-full border-4 border-sky-200 border-t-sky-600 animate-spin mx-auto mb-3" />
         <p className="text-xs text-slate-500 font-bold">Loading medication details...</p>
       </div>
     );
@@ -85,7 +85,7 @@ export default function SingleProductPage() {
     return (
       <div className="max-w-md mx-auto px-4 py-16 text-center space-y-3">
         <h2 className="font-heading font-bold text-lg text-slate-900">Product Not Found</h2>
-        <Link href="/pharmacy" className="text-teal-700 text-xs font-bold hover:underline">
+        <Link href="/pharmacy" className="text-sky-700 text-xs font-bold hover:underline">
           Return to Pharmacy Store
         </Link>
       </div>
@@ -103,7 +103,7 @@ export default function SingleProductPage() {
       {/* Back Link */}
       <Link
         href="/pharmacy"
-        className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-teal-700 transition-colors"
+        className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-sky-700 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>Back to Pharmacy Catalog</span>
@@ -129,7 +129,7 @@ export default function SingleProductPage() {
                 Prescription Required (Rx)
               </span>
             ) : (
-              <span className="bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-lg shadow-sm">
+              <span className="bg-sky-600 text-white text-xs font-bold px-3 py-1 rounded-lg shadow-sm">
                 Over-The-Counter (OTC)
               </span>
             )}
@@ -139,7 +139,7 @@ export default function SingleProductPage() {
         {/* Product Details & Buy Box */}
         <div className="space-y-5">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-teal-700 font-heading">
+            <span className="text-xs font-bold uppercase tracking-wider text-sky-700 font-heading">
               {product.category}
             </span>
             <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-slate-900 mt-1">
@@ -151,7 +151,7 @@ export default function SingleProductPage() {
                 {Number(product.rating || 4.8).toFixed(1)}
               </span>
               <span>•</span>
-              <span className="text-emerald-700 font-semibold flex items-center gap-1">
+              <span className="text-sky-700 font-semibold flex items-center gap-1">
                 <Check className="w-3.5 h-3.5" /> In Stock & Ready to Dispense
               </span>
             </div>
@@ -161,7 +161,7 @@ export default function SingleProductPage() {
           <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
             <div>
               <span className="block text-[11px] font-bold text-slate-600 uppercase">Unit Price</span>
-              <span className="font-heading font-extrabold text-2xl sm:text-3xl text-teal-800">
+              <span className="font-heading font-extrabold text-2xl sm:text-3xl text-sky-800">
                 ${Number(product.price).toFixed(2)}
               </span>
             </div>
@@ -170,7 +170,7 @@ export default function SingleProductPage() {
             <div className="flex items-center border border-slate-200 rounded-xl bg-white shadow-2xs">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="p-2 text-slate-600 hover:text-teal-700"
+                className="p-2 text-slate-600 hover:text-sky-700"
                 aria-label="Decrease"
               >
                 <Minus className="w-4 h-4" />
@@ -178,7 +178,7 @@ export default function SingleProductPage() {
               <span className="px-3 text-sm font-bold text-slate-900">{quantity}</span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
-                className="p-2 text-slate-600 hover:text-teal-700"
+                className="p-2 text-slate-600 hover:text-sky-700"
                 aria-label="Increase"
               >
                 <Plus className="w-4 h-4" />
@@ -200,7 +200,7 @@ export default function SingleProductPage() {
           <div className="space-y-2 pt-2">
             <button
               onClick={handleAddToCart}
-              className="w-full py-3.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-teal-600/20 active:scale-99 transition-all cursor-pointer"
+              className="w-full py-3.5 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-sky-600/20 active:scale-99 transition-all cursor-pointer"
             >
               <ShoppingBag className="w-4 h-4" />
               <span>Add to Cart — ${(product.price * quantity).toFixed(2)}</span>
@@ -210,11 +210,11 @@ export default function SingleProductPage() {
           {/* Delivery & Security Badges */}
           <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100 text-xs text-slate-600">
             <div className="flex items-center gap-2">
-              <Truck className="w-4 h-4 text-teal-600" />
+              <Truck className="w-4 h-4 text-sky-600" />
               <span>Free express delivery over $35</span>
             </div>
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-teal-600" />
+              <ShieldCheck className="w-4 h-4 text-sky-600" />
               <span>Pharmacist verified authenticity</span>
             </div>
           </div>
@@ -229,7 +229,7 @@ export default function SingleProductPage() {
             onClick={() => setActiveTab('details')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'details'
-                ? 'bg-teal-50 text-teal-800 border border-teal-200'
+                ? 'bg-sky-50 text-sky-800 border border-sky-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -239,7 +239,7 @@ export default function SingleProductPage() {
             onClick={() => setActiveTab('dosage')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'dosage'
-                ? 'bg-teal-50 text-teal-800 border border-teal-200'
+                ? 'bg-sky-50 text-sky-800 border border-sky-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -249,7 +249,7 @@ export default function SingleProductPage() {
             onClick={() => setActiveTab('warnings')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'warnings'
-                ? 'bg-teal-50 text-teal-800 border border-teal-200'
+                ? 'bg-sky-50 text-sky-800 border border-sky-200'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -306,7 +306,7 @@ export default function SingleProductPage() {
 
         <button
           onClick={handleAddToCart}
-          className="flex-1 py-3 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-teal-600/20 active:scale-95 transition-all"
+          className="flex-1 py-3 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-sky-600/20 active:scale-95 transition-all"
         >
           <ShoppingBag className="w-4 h-4" />
           <span>Add to Cart</span>

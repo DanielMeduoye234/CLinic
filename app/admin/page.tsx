@@ -524,7 +524,7 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3 sm:gap-4">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold shrink-0">
             <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
@@ -538,7 +538,7 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-3 sm:gap-4">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold shrink-0">
             <Users className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
@@ -571,13 +571,13 @@ export default function AdminDashboardPage() {
         <div 
           className={`p-4 rounded-2xl border flex items-center justify-between text-xs sm:text-sm font-semibold transition-all ${
             statusMessage.type === 'success' 
-              ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
+              ? 'bg-sky-50 border-sky-200 text-sky-800' 
               : 'bg-rose-50 border-rose-200 text-rose-800'
           }`}
         >
           <div className="flex items-center gap-2">
             {statusMessage.type === 'success' ? (
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-sky-600 shrink-0" />
             ) : (
               <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             )}
@@ -598,7 +598,7 @@ export default function AdminDashboardPage() {
           onClick={() => setActiveMainTab('doctors')}
           className={`px-4 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm flex items-center gap-2 transition-all whitespace-nowrap ${
             activeMainTab === 'doctors'
-              ? 'bg-teal-600 text-white shadow-xs'
+              ? 'bg-sky-600 text-white shadow-xs'
               : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
           }`}
         >
@@ -613,7 +613,7 @@ export default function AdminDashboardPage() {
           onClick={() => setActiveMainTab('patients')}
           className={`px-4 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm flex items-center gap-2 transition-all whitespace-nowrap ${
             activeMainTab === 'patients'
-              ? 'bg-teal-600 text-white shadow-xs'
+              ? 'bg-sky-600 text-white shadow-xs'
               : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
           }`}
         >
@@ -628,7 +628,7 @@ export default function AdminDashboardPage() {
           onClick={() => setActiveMainTab('products')}
           className={`px-4 py-2.5 rounded-xl font-heading font-bold text-xs sm:text-sm flex items-center gap-2 transition-all whitespace-nowrap ${
             activeMainTab === 'products'
-              ? 'bg-teal-600 text-white shadow-xs'
+              ? 'bg-sky-600 text-white shadow-xs'
               : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
           }`}
         >
@@ -670,8 +670,8 @@ export default function AdminDashboardPage() {
                 onClick={() => setDoctorSubFilter('verified')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   doctorSubFilter === 'verified'
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
+                    ? 'bg-sky-600 text-white'
+                    : 'bg-sky-50 text-sky-800 hover:bg-sky-100'
                 }`}
               >
                 Verified Active ({verifiedCount})
@@ -695,7 +695,7 @@ export default function AdminDashboardPage() {
                 value={doctorSearch}
                 onChange={(e) => setDoctorSearch(e.target.value)}
                 placeholder="Search name, specialty, license..."
-                className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
               />
             </div>
           </div>
@@ -703,7 +703,7 @@ export default function AdminDashboardPage() {
           {/* Doctor List */}
           {loading ? (
             <div className="py-20 text-center space-y-2">
-              <RefreshCw className="w-6 h-6 text-teal-600 animate-spin mx-auto" />
+              <RefreshCw className="w-6 h-6 text-sky-600 animate-spin mx-auto" />
               <p className="text-xs text-slate-500">Loading doctor profiles...</p>
             </div>
           ) : filteredDoctors.length === 0 ? (
@@ -740,7 +740,7 @@ export default function AdminDashboardPage() {
                       {/* Top Header of Card */}
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-2xl bg-teal-50 border border-teal-100 text-teal-800 font-bold font-heading flex items-center justify-center text-lg">
+                          <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 text-sky-800 font-bold font-heading flex items-center justify-center text-lg">
                             {docName.charAt(0)}
                           </div>
                           <div>
@@ -749,7 +749,7 @@ export default function AdminDashboardPage() {
                                 Dr. {docName}
                               </h3>
                             </div>
-                            <span className="text-xs text-teal-700 font-semibold">{doc.specialty}</span>
+                            <span className="text-xs text-sky-700 font-semibold">{doc.specialty}</span>
                             <span className="text-xs text-slate-400 block">{docEmail}</span>
                           </div>
                         </div>
@@ -766,8 +766,8 @@ export default function AdminDashboardPage() {
                             <span>Suspended</span>
                           </span>
                         ) : isVerified ? (
-                          <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800 border border-sky-200 flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-sky-600" />
                             <span>Verified</span>
                           </span>
                         ) : (
@@ -818,7 +818,7 @@ export default function AdminDashboardPage() {
                           href={doc.license_document_url}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-3 py-1.5 rounded-xl text-xs font-bold text-teal-700 bg-teal-50 hover:bg-teal-100 transition-colors flex items-center gap-1.5"
+                          className="px-3 py-1.5 rounded-xl text-xs font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 transition-colors flex items-center gap-1.5"
                         >
                           <FileText className="w-3.5 h-3.5" />
                           <span>View License</span>
@@ -834,7 +834,7 @@ export default function AdminDashboardPage() {
                           <button
                             onClick={() => handleModerateDoctor(doc.id, 'approve', docName)}
                             disabled={processingId === doc.id}
-                            className="px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50"
+                            className="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50"
                           >
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>{processingId === doc.id ? 'Approving...' : 'Approve Doctor'}</span>
@@ -881,7 +881,7 @@ export default function AdminDashboardPage() {
                               }
                             }}
                             disabled={processingId === doc.id}
-                            className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50"
+                            className="px-3.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-all disabled:opacity-50"
                           >
                             <PlayCircle className="w-3.5 h-3.5" />
                             <span>Reinstate Access</span>
@@ -913,14 +913,14 @@ export default function AdminDashboardPage() {
                 value={patientSearch}
                 onChange={(e) => setPatientSearch(e.target.value)}
                 placeholder="Search patient name, email..."
-                className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
               />
             </div>
           </div>
 
           {loading ? (
             <div className="py-20 text-center space-y-2">
-              <RefreshCw className="w-6 h-6 text-teal-600 animate-spin mx-auto" />
+              <RefreshCw className="w-6 h-6 text-sky-600 animate-spin mx-auto" />
               <p className="text-xs text-slate-500">Loading patients directory...</p>
             </div>
           ) : filteredPatients.length === 0 ? (
@@ -949,7 +949,7 @@ export default function AdminDashboardPage() {
                         <tr key={patient.id} className="hover:bg-slate-50/70 transition-colors">
                           <td className="py-3.5 px-4">
                             <div className="flex items-center gap-3">
-                              <div className="w-9 h-9 rounded-xl bg-teal-50 border border-teal-100 text-teal-700 font-bold flex items-center justify-center font-heading">
+                              <div className="w-9 h-9 rounded-xl bg-sky-50 border border-sky-100 text-sky-700 font-bold flex items-center justify-center font-heading">
                                 {patient.full_name?.charAt(0) || patient.email?.charAt(0).toUpperCase()}
                               </div>
                               <div>
@@ -1023,7 +1023,7 @@ export default function AdminDashboardPage() {
 
             <button
               onClick={openCreateProductModal}
-              className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-xs transition-all self-start sm:self-auto"
+              className="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-xs transition-all self-start sm:self-auto"
             >
               <Plus className="w-4 h-4" />
               <span>Add New Medication</span>
@@ -1039,7 +1039,7 @@ export default function AdminDashboardPage() {
                   onClick={() => setProductCategoryFilter(cat)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
                     productCategoryFilter === cat
-                      ? 'bg-teal-600 text-white shadow-xs'
+                      ? 'bg-sky-600 text-white shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -1055,7 +1055,7 @@ export default function AdminDashboardPage() {
                 value={productSearch}
                 onChange={(e) => setProductSearch(e.target.value)}
                 placeholder="Search medication name, ingredient..."
-                className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
               />
             </div>
           </div>
@@ -1063,7 +1063,7 @@ export default function AdminDashboardPage() {
           {/* Product Cards Grid */}
           {loading ? (
             <div className="py-20 text-center space-y-2">
-              <RefreshCw className="w-6 h-6 text-teal-600 animate-spin mx-auto" />
+              <RefreshCw className="w-6 h-6 text-sky-600 animate-spin mx-auto" />
               <p className="text-xs text-slate-500">Loading catalog items...</p>
             </div>
           ) : filteredProducts.length === 0 ? (
@@ -1097,7 +1097,7 @@ export default function AdminDashboardPage() {
                     </div>
 
                     <div>
-                      <span className="text-[11px] font-bold text-teal-700 uppercase tracking-wider block">
+                      <span className="text-[11px] font-bold text-sky-700 uppercase tracking-wider block">
                         {product.category}
                       </span>
                       <h3 className="font-heading font-bold text-base text-slate-900 leading-tight mt-0.5">
@@ -1117,7 +1117,7 @@ export default function AdminDashboardPage() {
                       </div>
                       <div className="text-right">
                         <span className="text-[10px] font-bold text-slate-400 uppercase block">Stock</span>
-                        <span className={`font-bold ${product.stock_quantity < 20 ? 'text-rose-600' : 'text-emerald-700'}`}>
+                        <span className={`font-bold ${product.stock_quantity < 20 ? 'text-rose-600' : 'text-sky-700'}`}>
                           {product.stock_quantity} in stock
                         </span>
                       </div>
@@ -1130,7 +1130,7 @@ export default function AdminDashboardPage() {
                       onClick={() => openEditProductModal(product)}
                       className="px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-1.5 transition-colors"
                     >
-                      <Edit2 className="w-3.5 h-3.5 text-teal-600" />
+                      <Edit2 className="w-3.5 h-3.5 text-sky-600" />
                       <span>Edit</span>
                     </button>
                     <button
@@ -1154,7 +1154,7 @@ export default function AdminDashboardPage() {
           <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl border border-slate-200 space-y-5 animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-sky-600 text-white flex items-center justify-center">
                   <Pill className="w-4 h-4" />
                 </div>
                 <h3 className="font-heading font-extrabold text-lg text-slate-900">
@@ -1178,7 +1178,7 @@ export default function AdminDashboardPage() {
                   value={productForm.name}
                   onChange={(e) => setProductForm({ ...productForm, name: e.target.value })}
                   placeholder="e.g. Amoxicillin 500mg"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
                 />
               </div>
 
@@ -1188,7 +1188,7 @@ export default function AdminDashboardPage() {
                   <select
                     value={productForm.category}
                     onChange={(e) => setProductForm({ ...productForm, category: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
                   >
                     <option value="Prescription Medications">Prescription Medications</option>
                     <option value="Pain Relief">Pain Relief</option>
@@ -1205,7 +1205,7 @@ export default function AdminDashboardPage() {
                   <select
                     value={productForm.dosage_form}
                     onChange={(e) => setProductForm({ ...productForm, dosage_form: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
                   >
                     <option value="Tablets">Tablets</option>
                     <option value="Capsules">Capsules</option>
@@ -1228,7 +1228,7 @@ export default function AdminDashboardPage() {
                     value={productForm.price}
                     onChange={(e) => setProductForm({ ...productForm, price: e.target.value })}
                     placeholder="14.50"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
                   />
                 </div>
 
@@ -1240,7 +1240,7 @@ export default function AdminDashboardPage() {
                     value={productForm.stock_quantity}
                     onChange={(e) => setProductForm({ ...productForm, stock_quantity: e.target.value })}
                     placeholder="100"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
                   />
                 </div>
               </div>
@@ -1252,7 +1252,7 @@ export default function AdminDashboardPage() {
                   value={productForm.active_ingredients}
                   onChange={(e) => setProductForm({ ...productForm, active_ingredients: e.target.value })}
                   placeholder="e.g. Amoxicillin Trihydrate 500mg"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
                 />
               </div>
 
@@ -1263,7 +1263,7 @@ export default function AdminDashboardPage() {
                   value={productForm.image_url}
                   onChange={(e) => setProductForm({ ...productForm, image_url: e.target.value })}
                   placeholder="https://..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
                 />
               </div>
 
@@ -1274,7 +1274,7 @@ export default function AdminDashboardPage() {
                   value={productForm.description}
                   onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
                   placeholder="Indications, usage notes, precautions..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
                 />
               </div>
 
@@ -1284,7 +1284,7 @@ export default function AdminDashboardPage() {
                   id="prescription-req"
                   checked={productForm.requires_prescription}
                   onChange={(e) => setProductForm({ ...productForm, requires_prescription: e.target.checked })}
-                  className="w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500"
+                  className="w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500"
                 />
                 <label htmlFor="prescription-req" className="font-bold text-slate-800">
                   Requires Certified Doctor Digital Prescription (Rx)
@@ -1302,7 +1302,7 @@ export default function AdminDashboardPage() {
                 <button
                   type="submit"
                   disabled={processingId === 'product-saving'}
-                  className="px-5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold shadow-xs disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold shadow-xs disabled:opacity-50"
                 >
                   {processingId === 'product-saving' ? 'Saving...' : editingProduct ? 'Update Product' : 'Create Product'}
                 </button>

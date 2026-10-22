@@ -67,10 +67,10 @@ export default function HospitalMap({
         // 1km Walkable Radius Circle
         const radiusCircle = L.circle([userLocation.lat, userLocation.lng], {
           radius: 1000, // 1000 meters = 1 km
-          color: '#0d9488',
+          color: '#0ea5e9',
           weight: 1.5,
           opacity: 0.8,
-          fillColor: '#14b8a6',
+          fillColor: '#38bdf8',
           fillOpacity: 0.08,
           dashArray: '4, 6',
         }).addTo(map);
@@ -88,7 +88,7 @@ export default function HospitalMap({
             <div style="position: relative; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">
               <div style="position: absolute; inset: -8px; background: rgba(13, 148, 136, 0.25); border-radius: 9999px; animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;"></div>
               <div style="position: absolute; inset: -3px; background: rgba(13, 148, 136, 0.45); border-radius: 9999px;"></div>
-              <div style="position: relative; width: 18px; height: 18px; background: #0f766e; border: 3px solid #ffffff; border-radius: 9999px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);"></div>
+              <div style="position: relative; width: 18px; height: 18px; background: #0284c7; border: 3px solid #ffffff; border-radius: 9999px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);"></div>
             </div>
           `,
           iconSize: [28, 28],
@@ -98,7 +98,7 @@ export default function HospitalMap({
         L.marker([userLocation.lat, userLocation.lng], { icon: userIcon, zIndexOffset: 1000 })
           .addTo(map)
           .bindPopup(`
-            <div style="font-family: inherit; font-size: 12px; font-weight: 700; color: #0f766e; text-align: center;">
+            <div style="font-family: inherit; font-size: 12px; font-weight: 700; color: #0284c7; text-align: center;">
               📍 You Are Here
               <div style="font-size: 10px; color: #64748b; font-weight: 500;">High-Accuracy Live GPS Position</div>
             </div>
@@ -113,7 +113,7 @@ export default function HospitalMap({
         const isEmergency = hosp.hasEmergency || hosp.type === 'Trauma Center';
         const isClinic = hosp.amenityType === 'clinic' || hosp.type === 'Urgent Care';
 
-        let markerBg = '#0d9488'; // teal default
+        let markerBg = '#0ea5e9'; // teal default
         let markerSymbol = 'H';
         if (isEmergency) {
           markerBg = '#dc2626'; // rose/red
@@ -147,14 +147,14 @@ export default function HospitalMap({
                 <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: ${isUnder1km ? '#fef9c3; color: #854d0e;' : '#f1f5f9; color: #475569;'}">
                   ${isUnder1km ? '⚡ Under 1km • Walkable' : (hosp.type || 'Medical Facility')}
                 </span>
-                <span style="font-size: 12px; font-weight: 900; color: #0d9488;">
+                <span style="font-size: 12px; font-weight: 900; color: #0ea5e9;">
                   ${distInfo.primary}
                 </span>
               </div>
               <div style="font-weight: 800; font-size: 13px; color: #0f172a; margin-bottom: 2px;">${hosp.name}</div>
               <div style="font-size: 11px; color: #64748b; margin-bottom: 6px; line-height: 1.3;">${hosp.address}</div>
               <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; border-top: 1px solid #e2e8f0; padding-top: 5px;">
-                <span style="color: #10b981;">Wait: ~${hosp.waitTimeMins} mins</span>
+                <span style="color: #0284c7;">Wait: ~${hosp.waitTimeMins} mins</span>
                 <span style="color: #f59e0b;">★ ${hosp.rating}</span>
               </div>
             </div>
@@ -225,8 +225,8 @@ export default function HospitalMap({
           title="Center map on your precise GPS coordinates"
         >
           <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-600"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-600"></span>
           </span>
           <span>Center on My GPS</span>
         </button>
@@ -243,13 +243,13 @@ export default function HospitalMap({
           <span>Walk-In Clinic / Medical Center</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-3.5 h-3.5 rounded-md bg-teal-600 border border-yellow-300 text-yellow-300 flex items-center justify-center text-[9px] font-bold">★</span>
+          <span className="w-3.5 h-3.5 rounded-md bg-sky-600 border border-yellow-300 text-yellow-300 flex items-center justify-center text-[9px] font-bold">★</span>
           <span className="font-bold text-amber-700">Nearest Under 1km (Walkable)</span>
         </div>
         {userLocation && (
           <div className="flex items-center gap-2 pt-0.5 border-t border-slate-200/60">
-            <span className="w-3 h-3 rounded-full bg-teal-700 border-2 border-white shadow-xs"></span>
-            <span className="text-teal-900 font-bold">Your Exact Location (1km Zone)</span>
+            <span className="w-3 h-3 rounded-full bg-sky-700 border-2 border-white shadow-xs"></span>
+            <span className="text-sky-900 font-bold">Your Exact Location (1km Zone)</span>
           </div>
         )}
       </div>

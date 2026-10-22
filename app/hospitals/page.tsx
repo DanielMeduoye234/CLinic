@@ -32,7 +32,7 @@ const HospitalMap = dynamic(() => import('@/components/HospitalMap'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full min-h-[380px] lg:min-h-[640px] bg-slate-100 rounded-2xl flex flex-col items-center justify-center text-slate-400 animate-pulse">
-      <MapPin className="w-8 h-8 text-teal-600 mb-2 animate-bounce" />
+      <MapPin className="w-8 h-8 text-sky-600 mb-2 animate-bounce" />
       <span className="text-xs font-semibold">Loading High-Precision Live Hospital Map...</span>
     </div>
   ),
@@ -267,8 +267,8 @@ export default function FindHospitalsPage() {
                 <h1 className="font-heading font-extrabold text-lg sm:text-2xl text-white tracking-tight">
                   Hospital & Emergency Center Locator
                 </h1>
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-0.5 rounded-full">
-                  <Target className="w-3 h-3 text-emerald-400" />
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40 px-2.5 py-0.5 rounded-full">
+                  <Target className="w-3 h-3 text-sky-400" />
                   100% Precise GPS
                 </span>
                 {under1kmCount > 0 && (
@@ -308,11 +308,11 @@ export default function FindHospitalsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by city (e.g. Lagos, London, New York) or hospital name..."
-              className="w-full pl-10 pr-20 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 transition-all placeholder:text-slate-400"
+              className="w-full pl-10 pr-20 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600 transition-all placeholder:text-slate-400"
             />
             <button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-[11px] font-bold cursor-pointer"
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-[11px] font-bold cursor-pointer"
             >
               Search
             </button>
@@ -323,9 +323,9 @@ export default function FindHospitalsPage() {
             type="button"
             onClick={requestHighPrecisionGPS}
             disabled={isRefreshing}
-            className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm shadow-teal-600/20 active:scale-95 disabled:opacity-70 shrink-0 cursor-pointer"
+            className="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm shadow-sky-600/20 active:scale-95 disabled:opacity-70 shrink-0 cursor-pointer"
           >
-            <Compass className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-teal-200' : ''}`} />
+            <Compass className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-sky-200' : ''}`} />
             <span>{isRefreshing ? 'Locating...' : 'Locate My Exact Position'}</span>
           </button>
         </form>
@@ -341,7 +341,7 @@ export default function FindHospitalsPage() {
                 setSearchQuery(city);
                 fetchLiveHospitals(undefined, undefined, city);
               }}
-              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-teal-50 hover:text-teal-700 hover:border-teal-300 border border-slate-200/70 text-slate-700 text-[11px] font-semibold shrink-0 transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-sky-50 hover:text-sky-700 hover:border-sky-300 border border-slate-200/70 text-slate-700 text-[11px] font-semibold shrink-0 transition-colors cursor-pointer"
             >
               📍 {city}
             </button>
@@ -407,24 +407,24 @@ export default function FindHospitalsPage() {
         )}
 
         {/* Live Precision Status Bar */}
-        <div className="text-[11px] font-medium text-teal-900 bg-teal-50/80 px-3.5 py-2.5 rounded-xl border border-teal-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="text-[11px] font-medium text-sky-900 bg-sky-50/80 px-3.5 py-2.5 rounded-xl border border-sky-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <span className="flex items-center gap-2">
             <span className="relative flex h-2.5 w-2.5 shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-600"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-600"></span>
             </span>
-            <span className="font-bold text-teal-950">{locationStatus}</span>
+            <span className="font-bold text-sky-950">{locationStatus}</span>
           </span>
 
           {userLocation && (
             <div className="flex items-center gap-2 text-slate-600 font-mono text-[10px] shrink-0">
-              <span className="bg-white/80 px-2 py-0.5 rounded border border-teal-200/50">
+              <span className="bg-white/80 px-2 py-0.5 rounded border border-sky-200/50">
                 Lat: {userLocation.lat.toFixed(5)}
               </span>
-              <span className="bg-white/80 px-2 py-0.5 rounded border border-teal-200/50">
+              <span className="bg-white/80 px-2 py-0.5 rounded border border-sky-200/50">
                 Lng: {userLocation.lng.toFixed(5)}
               </span>
-              <span className="bg-teal-700 text-white font-bold px-2 py-0.5 rounded shadow-xs">
+              <span className="bg-sky-700 text-white font-bold px-2 py-0.5 rounded shadow-xs">
                 {hospitals.length} Facilities Found
               </span>
             </div>
@@ -481,7 +481,7 @@ export default function FindHospitalsPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-teal-600 cursor-pointer"
+              className="bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-sky-600 cursor-pointer"
             >
               <option value="distance">Closest Real Distance (Ascending)</option>
               <option value="wait">Shortest ER / Clinic Wait</option>
@@ -527,14 +527,14 @@ export default function FindHospitalsPage() {
           
           {/* Closest Medical Center Callout */}
           {closestFacility && (
-            <div className="p-4 rounded-xl bg-gradient-to-r from-teal-950 via-teal-900 to-slate-950 text-white border border-teal-400/40 shadow-md space-y-3 relative overflow-hidden">
+            <div className="p-4 rounded-xl bg-gradient-to-r from-sky-950 via-sky-900 to-slate-950 text-white border border-sky-400/40 shadow-md space-y-3 relative overflow-hidden">
               <div className="flex items-center justify-between">
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-teal-500/20 border border-teal-400/40 text-[10px] font-extrabold uppercase tracking-wider text-teal-200">
-                  <Sparkles className="w-3 h-3 text-teal-300" />
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-sky-500/20 border border-sky-400/40 text-[10px] font-extrabold uppercase tracking-wider text-sky-200">
+                  <Sparkles className="w-3 h-3 text-sky-300" />
                   #1 Nearest Medical Facility
                 </span>
                 
-                <span className="text-xs font-extrabold font-mono text-teal-200 bg-teal-800/60 px-2 py-0.5 rounded border border-teal-600/40">
+                <span className="text-xs font-extrabold font-mono text-sky-200 bg-sky-800/60 px-2 py-0.5 rounded border border-sky-600/40">
                   {formatDistanceDisplay(closestFacility.distanceKm, closestFacility.distanceMiles).primary}
                 </span>
               </div>
@@ -555,8 +555,8 @@ export default function FindHospitalsPage() {
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-200 pt-1 border-t border-teal-800/50">
-                <span className="flex items-center gap-1 text-emerald-300">
+              <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-200 pt-1 border-t border-sky-800/50">
+                <span className="flex items-center gap-1 text-sky-300">
                   <Clock className="w-3.5 h-3.5" />
                   Est. Wait: ~{closestFacility.waitTimeMins} mins
                 </span>
@@ -565,8 +565,8 @@ export default function FindHospitalsPage() {
                   {closestFacility.rating} ({closestFacility.totalReviews} reviews)
                 </span>
                 {closestFacility.isUnder1km && (
-                  <span className="flex items-center gap-1 text-teal-200">
-                    <Footprints className="w-3.5 h-3.5 text-teal-300" />
+                  <span className="flex items-center gap-1 text-sky-200">
+                    <Footprints className="w-3.5 h-3.5 text-sky-300" />
                     ~{Math.max(2, Math.round((closestFacility.distanceKm || 0.3) * 12))} min walk
                   </span>
                 )}
@@ -575,7 +575,7 @@ export default function FindHospitalsPage() {
               <div className="flex items-center gap-2 pt-1">
                 <a
                   href={`tel:${closestFacility.phone}`}
-                  className="flex-1 py-2 px-3 rounded-lg bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                  className="flex-1 py-2 px-3 rounded-lg bg-sky-400 hover:bg-sky-300 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                 >
                   <Phone className="w-3.5 h-3.5" />
                   <span>Call Emergency Reception</span>
@@ -630,13 +630,13 @@ export default function FindHospitalsPage() {
                       isUnder1km ? 'border-amber-300/80 bg-gradient-to-r from-amber-50/20 via-white to-white' : ''
                     } ${
                       isSelected
-                        ? 'border-teal-600 ring-2 ring-teal-500/20 shadow-md'
+                        ? 'border-sky-600 ring-2 ring-sky-500/20 shadow-md'
                         : 'border-slate-200 hover:border-slate-300 hover:shadow-xs'
                     }`}
                   >
                     {/* Nearest Tag for top results */}
                     {idx === 0 && (
-                      <span className="absolute -top-2.5 right-4 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-teal-600 text-white shadow-xs">
+                      <span className="absolute -top-2.5 right-4 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-sky-600 text-white shadow-xs">
                         Nearest Facility
                       </span>
                     )}
@@ -649,14 +649,14 @@ export default function FindHospitalsPage() {
                               ? 'bg-rose-600'
                               : hosp.type === 'Urgent Care'
                               ? 'bg-sky-600'
-                              : 'bg-teal-600'
+                              : 'bg-sky-600'
                           }`}
                         >
                           {hosp.hasEmergency ? '✚' : 'H'}
                         </span>
                         <div>
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <h4 className="font-heading font-bold text-sm text-slate-900 hover:text-teal-700 transition-colors">
+                            <h4 className="font-heading font-bold text-sm text-slate-900 hover:text-sky-700 transition-colors">
                               {hosp.name}
                             </h4>
                             {isUnder1km && (
@@ -666,7 +666,7 @@ export default function FindHospitalsPage() {
                               </span>
                             )}
                           </div>
-                          <span className="text-[11px] font-semibold text-teal-700">
+                          <span className="text-[11px] font-semibold text-sky-700">
                             {hosp.traumaLevel || hosp.type}
                           </span>
                         </div>
@@ -711,7 +711,7 @@ export default function FindHospitalsPage() {
                     {/* Status & Actions */}
                     <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
                       <div className="flex items-center gap-3">
-                        <span className="font-bold text-emerald-600 flex items-center gap-1 text-[11px]">
+                        <span className="font-bold text-sky-600 flex items-center gap-1 text-[11px]">
                           <Clock className="w-3 h-3" />
                           Wait: ~{hosp.waitTimeMins}m
                         </span>
@@ -735,7 +735,7 @@ export default function FindHospitalsPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="px-2.5 py-1.5 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
+                          className="px-2.5 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-800 font-bold text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
                         >
                           <Navigation className="w-3 h-3" />
                           <span>Directions</span>

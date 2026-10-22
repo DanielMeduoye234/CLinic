@@ -133,8 +133,8 @@ function DoctorsDirectoryContent() {
   if (!isAuthLoading && profile?.role === 'doctor') {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
-        <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-200 text-teal-800 flex items-center justify-center mx-auto">
-          <Stethoscope className="w-8 h-8 text-teal-600" />
+        <div className="w-16 h-16 rounded-2xl bg-sky-50 border border-sky-200 text-sky-800 flex items-center justify-center mx-auto">
+          <Stethoscope className="w-8 h-8 text-sky-600" />
         </div>
         <h2 className="font-heading font-extrabold text-2xl text-slate-900">Physician Access Notice</h2>
         <p className="text-sm text-slate-600">
@@ -157,8 +157,8 @@ function DoctorsDirectoryContent() {
       {/* Directory Page Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 pb-5 border-b border-slate-200">
         <div>
-          <div className="flex items-center gap-1.5 text-teal-700 text-xs font-bold uppercase tracking-wider font-heading mb-0.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-teal-600" />
+          <div className="flex items-center gap-1.5 text-sky-700 text-xs font-bold uppercase tracking-wider font-heading mb-0.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
             <span>Certified Medical Directory</span>
           </div>
           <h1 className="font-heading font-extrabold text-xl sm:text-3xl text-slate-900 tracking-tight">
@@ -172,9 +172,9 @@ function DoctorsDirectoryContent() {
         {/* Quick Symptom Assessment Trigger */}
         <button
           onClick={() => setIsTriageOpen(true)}
-          className="px-4 py-2.5 rounded-xl bg-teal-50 border border-teal-200 text-teal-800 hover:bg-teal-100 font-bold text-xs flex items-center gap-2 self-start md:self-auto transition-colors"
+          className="px-4 py-2.5 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 hover:bg-sky-100 font-bold text-xs flex items-center gap-2 self-start md:self-auto transition-colors"
         >
-          <Sparkles className="w-4 h-4 text-teal-600" />
+          <Sparkles className="w-4 h-4 text-sky-600" />
           <span>Unsure which specialist? Check Symptoms</span>
         </button>
       </div>
@@ -191,7 +191,7 @@ function DoctorsDirectoryContent() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by doctor name, specialty (e.g. Cardiologist), or hospital..."
-              className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+              className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
             />
           </div>
 
@@ -201,7 +201,7 @@ function DoctorsDirectoryContent() {
               onClick={() => setOnlyOnline(!onlyOnline)}
               className={`px-3.5 py-3 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all ${
                 onlyOnline
-                  ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
+                  ? 'bg-sky-50 border-sky-300 text-sky-800'
                   : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
               }`}
             >
@@ -214,7 +214,7 @@ function DoctorsDirectoryContent() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="px-3.5 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:border-teal-600 appearance-none pr-8 cursor-pointer"
+                className="px-3.5 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:border-sky-600 appearance-none pr-8 cursor-pointer"
               >
                 <option value="rating">Highest Rated</option>
                 <option value="experience">Most Experienced</option>
@@ -234,7 +234,7 @@ function DoctorsDirectoryContent() {
               onClick={() => setSelectedSpecialty(cat)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all ${
                 selectedSpecialty === cat
-                  ? 'bg-teal-600 text-white shadow-xs'
+                  ? 'bg-sky-600 text-white shadow-xs'
                   : 'bg-white border border-slate-200/80 text-slate-600 hover:text-slate-900 hover:border-slate-300'
               }`}
             >
@@ -254,7 +254,7 @@ function DoctorsDirectoryContent() {
         </div>
       ) : filteredDoctors.length === 0 ? (
         <div className="py-16 px-4 bg-white border border-slate-200 rounded-3xl text-center max-w-lg mx-auto space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mx-auto">
+          <div className="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto">
             <Stethoscope className="w-7 h-7" />
           </div>
           <div>
@@ -278,7 +278,7 @@ function DoctorsDirectoryContent() {
             </button>
             <button
               onClick={() => setIsTriageOpen(true)}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs hover:bg-teal-700 shadow-sm shadow-teal-600/20"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-sky-600 text-white font-bold text-xs hover:bg-sky-700 shadow-sm shadow-sky-600/20"
             >
               Check Symptoms with AI
             </button>

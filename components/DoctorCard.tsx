@@ -29,12 +29,12 @@ export default function DoctorCard({ doctor }: DoctorCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/90 hover:border-teal-500/80 p-4 sm:p-5 transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/5 flex flex-col justify-between group">
+    <div className="bg-white rounded-2xl border border-slate-200/90 hover:border-sky-500/80 p-4 sm:p-5 transition-all duration-200 hover:shadow-lg hover:shadow-sky-500/5 flex flex-col justify-between group">
       <div>
         {/* Top Header: Avatar & Online Status & Verified Badge */}
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-3">
-            <div className="relative w-14 h-14 rounded-2xl bg-teal-50 border border-teal-100 flex items-center justify-center font-heading font-bold text-teal-800 text-xl overflow-hidden shrink-0">
+            <div className="relative w-14 h-14 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center font-heading font-bold text-sky-800 text-xl overflow-hidden shrink-0">
               {docName.replace('Dr. ', '').charAt(0)}
               {doctor.is_online && (
                 <span className="absolute bottom-1 right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full" />
@@ -43,15 +43,15 @@ export default function DoctorCard({ doctor }: DoctorCardProps) {
 
             <div>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <h3 className="font-heading font-bold text-base text-slate-900 group-hover:text-teal-700 transition-colors">
+                <h3 className="font-heading font-bold text-base text-slate-900 group-hover:text-sky-700 transition-colors">
                   {docName}
                 </h3>
-                <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-teal-700 bg-teal-50 border border-teal-200/60 px-1.5 py-0.5 rounded-md">
-                  <ShieldCheck className="w-3 h-3 text-teal-600" />
+                <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-sky-700 bg-sky-50 border border-sky-200/60 px-1.5 py-0.5 rounded-md">
+                  <ShieldCheck className="w-3 h-3 text-sky-600" />
                   Verified
                 </span>
               </div>
-              <p className="text-xs font-semibold text-teal-700">
+              <p className="text-xs font-semibold text-sky-700">
                 {doctor.specialty}
               </p>
               <div className="flex items-center gap-1 text-[11px] text-slate-600 mt-0.5">
@@ -83,7 +83,7 @@ export default function DoctorCard({ doctor }: DoctorCardProps) {
           <div>
             <span className="block text-[10px] uppercase font-bold text-slate-600">Response</span>
             <span className="font-heading font-bold text-xs text-slate-900 flex items-center justify-center gap-0.5">
-              <Clock className="w-3 h-3 text-emerald-600" />
+              <Clock className="w-3 h-3 text-sky-600" />
               &lt; 5m
             </span>
           </div>

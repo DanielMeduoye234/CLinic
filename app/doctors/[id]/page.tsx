@@ -99,8 +99,8 @@ export default function DoctorDetailPage() {
   if (!isAuthLoading && profile?.role === 'doctor') {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
-        <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-200 text-teal-800 flex items-center justify-center mx-auto">
-          <Stethoscope className="w-8 h-8 text-teal-600" />
+        <div className="w-16 h-16 rounded-2xl bg-sky-50 border border-sky-200 text-sky-800 flex items-center justify-center mx-auto">
+          <Stethoscope className="w-8 h-8 text-sky-600" />
         </div>
         <h2 className="font-heading font-extrabold text-2xl text-slate-900">Physician Access Notice</h2>
         <p className="text-sm text-slate-600">
@@ -108,7 +108,7 @@ export default function DoctorDetailPage() {
         </p>
         <Link
           href="/doctor/dashboard"
-          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs shadow-md shadow-teal-600/20 hover:bg-teal-700"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-sky-600 text-white font-bold text-xs shadow-md shadow-sky-600/20 hover:bg-sky-700"
         >
           <span>Go to Doctor Practice Dashboard</span>
         </Link>
@@ -119,7 +119,7 @@ export default function DoctorDetailPage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <div className="w-12 h-12 rounded-full border-4 border-teal-200 border-t-teal-600 animate-spin mx-auto mb-4" />
+        <div className="w-12 h-12 rounded-full border-4 border-sky-200 border-t-sky-600 animate-spin mx-auto mb-4" />
         <p className="text-xs text-slate-500 font-semibold">Loading doctor clinical credentials...</p>
       </div>
     );
@@ -134,7 +134,7 @@ export default function DoctorDetailPage() {
         </p>
         <Link
           href="/doctors"
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 text-white font-bold text-xs"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 text-white font-bold text-xs"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Directory</span>
@@ -151,7 +151,7 @@ export default function DoctorDetailPage() {
       {/* Back Link */}
       <Link
         href="/doctors"
-        className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-teal-700 transition-colors"
+        className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-sky-700 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>Back to Doctors Directory</span>
@@ -162,7 +162,7 @@ export default function DoctorDetailPage() {
         <div className="flex flex-col sm:flex-row gap-5 items-start">
           
           {/* Avatar */}
-          <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-teal-50 border border-teal-100 flex items-center justify-center font-heading font-extrabold text-teal-800 text-4xl overflow-hidden shrink-0">
+          <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-sky-50 border border-sky-100 flex items-center justify-center font-heading font-extrabold text-sky-800 text-4xl overflow-hidden shrink-0">
             {docName.replace('Dr. ', '').charAt(0)}
             {doctor.is_online && (
               <span className="absolute bottom-1.5 right-1.5 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full" />
@@ -175,13 +175,13 @@ export default function DoctorDetailPage() {
               <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-slate-900">
                 {docName}
               </h1>
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-teal-800 bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full">
-                <ShieldCheck className="w-3.5 h-3.5 text-teal-600" />
+              <span className="inline-flex items-center gap-1 text-xs font-bold text-sky-800 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full">
+                <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
                 Verified Physician
               </span>
             </div>
 
-            <p className="font-heading font-bold text-base text-teal-700">
+            <p className="font-heading font-bold text-base text-sky-700">
               {doctor.specialty}
             </p>
 
@@ -198,8 +198,8 @@ export default function DoctorDetailPage() {
               <span>•</span>
               <span className="font-semibold text-slate-900">{doctor.years_of_experience} Years Experience</span>
               <span>•</span>
-              <span className="flex items-center gap-1 text-emerald-700 font-semibold">
-                <Clock className="w-3.5 h-3.5 text-emerald-600" />
+              <span className="flex items-center gap-1 text-sky-700 font-semibold">
+                <Clock className="w-3.5 h-3.5 text-sky-600" />
                 Fast Responder (&lt; 5m)
               </span>
             </div>
@@ -234,7 +234,7 @@ export default function DoctorDetailPage() {
           
           <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 space-y-3">
             <h3 className="font-heading font-bold text-base text-slate-900 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-teal-600" />
+              <FileText className="w-4 h-4 text-sky-600" />
               About & Philosophy of Care
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line">
@@ -252,7 +252,7 @@ export default function DoctorDetailPage() {
                 {doctor.sub_specialties.map((sub) => (
                   <span
                     key={sub}
-                    className="px-3 py-1.5 rounded-xl bg-teal-50 text-teal-800 text-xs font-semibold border border-teal-100"
+                    className="px-3 py-1.5 rounded-xl bg-sky-50 text-sky-800 text-xs font-semibold border border-sky-100"
                   >
                     {sub}
                   </span>
@@ -268,7 +268,7 @@ export default function DoctorDetailPage() {
           
           <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-4">
             <h3 className="font-heading font-bold text-sm text-slate-900 flex items-center gap-2">
-              <Award className="w-4 h-4 text-teal-600" />
+              <Award className="w-4 h-4 text-sky-600" />
               Verified Credentials
             </h3>
 
@@ -279,8 +279,8 @@ export default function DoctorDetailPage() {
               </div>
               <div className="pb-3 border-b border-slate-100">
                 <span className="block text-[10px] uppercase font-bold text-slate-600">Verification Status</span>
-                <span className="inline-flex items-center gap-1 text-emerald-700 font-bold">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="inline-flex items-center gap-1 text-sky-700 font-bold">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-sky-600" />
                   Verified by CLINIC Medical Board
                 </span>
               </div>

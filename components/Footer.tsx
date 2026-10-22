@@ -46,7 +46,7 @@ export default function Footer() {
               href="/hospitals"
               className="flex-1 md:flex-initial px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-700"
             >
-              <MapPin className="w-3.5 h-3.5 text-teal-400" />
+              <MapPin className="w-3.5 h-3.5 text-sky-400" />
               <span>Find Nearest Hospital</span>
             </Link>
             <a
@@ -65,11 +65,11 @@ export default function Footer() {
           {/* Col 1: Brand & Clinical Accreditation */}
           <div className="col-span-2 md:col-span-1 space-y-3">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-xl bg-teal-600 flex items-center justify-center text-white shadow-sm shadow-teal-600/20">
+              <div className="w-8 h-8 rounded-xl bg-sky-500 flex items-center justify-center text-white shadow-sm shadow-sky-500/25">
                 <Stethoscope className="w-4 h-4" />
               </div>
-              <span className="font-heading font-extrabold text-xl tracking-tight text-white group-hover:text-teal-400 transition-colors leading-none">
-                CLINIC<span className="text-teal-500">.</span>
+              <span className="font-heading font-extrabold text-xl tracking-tight text-white group-hover:text-sky-400 transition-colors leading-none">
+                CLINIC<span className="text-sky-500">.</span>
               </span>
             </Link>
 
@@ -78,12 +78,12 @@ export default function Footer() {
             </p>
 
             <div className="space-y-1.5 pt-1">
-              <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 px-2.5 py-1 rounded-lg">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-sky-300 bg-sky-950/50 border border-sky-800/60 px-2.5 py-1 rounded-lg">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
                 Telehealth & AI Systems Online
               </div>
               <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-                <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
+                <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
                 <span>100% Board-Certified Doctors</span>
               </div>
             </div>
@@ -96,22 +96,22 @@ export default function Footer() {
             </h5>
             <ul className="space-y-2 text-xs text-slate-400">
               <li>
-                <Link href="/doctors" className="hover:text-teal-400 transition-colors">Find a Doctor</Link>
+                <Link href="/doctors" className="hover:text-sky-400 transition-colors">Find a Doctor</Link>
               </li>
               <li>
-                <Link href="/hospitals" className="hover:text-teal-400 transition-colors flex items-center gap-1">
+                <Link href="/hospitals" className="hover:text-sky-400 transition-colors flex items-center gap-1">
                   <span>Find Hospitals</span>
                   <span className="text-[9px] bg-rose-500/20 text-rose-300 px-1 py-0.2 rounded font-bold">24/7</span>
                 </Link>
               </li>
               <li>
-                <Link href="/pharmacy" className="hover:text-teal-400 transition-colors">Digital Pharmacy</Link>
+                <Link href="/pharmacy" className="hover:text-sky-400 transition-colors">Digital Pharmacy</Link>
               </li>
               <li>
-                <Link href="/auth/signup" className="hover:text-teal-400 transition-colors">Patient Sign Up</Link>
+                <Link href="/auth/signup" className="hover:text-sky-400 transition-colors">Patient Sign Up</Link>
               </li>
               <li>
-                <Link href="/auth/login" className="hover:text-teal-400 transition-colors">Account Portal</Link>
+                <Link href="/auth/login" className="hover:text-sky-400 transition-colors">Account Portal</Link>
               </li>
             </ul>
           </div>
@@ -123,13 +123,13 @@ export default function Footer() {
             </h5>
             <ul className="space-y-2 text-xs text-slate-400">
               <li>
-                <Link href="/auth/signup?role=doctor" className="hover:text-teal-400 transition-colors">Join Practice as Doctor</Link>
+                <Link href="/auth/signup?role=doctor" className="hover:text-sky-400 transition-colors">Join Practice as Doctor</Link>
               </li>
               <li>
-                <Link href="/doctor/onboarding" className="hover:text-teal-400 transition-colors">Submit Medical License</Link>
+                <Link href="/doctor/onboarding" className="hover:text-sky-400 transition-colors">Submit Medical License</Link>
               </li>
               <li>
-                <Link href="/doctor/dashboard" className="hover:text-teal-400 transition-colors">Provider Dashboard</Link>
+                <Link href="/doctor/dashboard" className="hover:text-sky-400 transition-colors">Provider Dashboard</Link>
               </li>
               <li>
                 <span className="text-slate-500">License Verification Guide</span>
@@ -147,16 +147,16 @@ export default function Footer() {
             </h5>
             <ul className="space-y-2 text-xs text-slate-400">
               <li>
-                <Link href="/hospitals" className="hover:text-teal-400 transition-colors">Level 1 Trauma Units</Link>
+                <Link href="/hospitals" className="hover:text-sky-400 transition-colors">Level 1 Trauma Units</Link>
               </li>
               <li>
-                <Link href="/hospitals" className="hover:text-teal-400 transition-colors">Pediatric Emergency ER</Link>
+                <Link href="/hospitals" className="hover:text-sky-400 transition-colors">Pediatric Emergency ER</Link>
               </li>
               <li>
-                <Link href="/hospitals" className="hover:text-teal-400 transition-colors">Chest Pain & Stroke Centers</Link>
+                <Link href="/hospitals" className="hover:text-sky-400 transition-colors">Chest Pain & Stroke Centers</Link>
               </li>
               <li>
-                <Link href="/hospitals" className="hover:text-teal-400 transition-colors">Walk-In Urgent Clinics</Link>
+                <Link href="/hospitals" className="hover:text-sky-400 transition-colors">Walk-In Urgent Clinics</Link>
               </li>
               <li>
                 <a href="tel:911" className="text-rose-400 hover:text-rose-300 font-bold">Emergency Hotline: 911</a>
@@ -173,8 +173,8 @@ export default function Footer() {
               All doctors undergo state medical board license credentialing. Zero unverified profiles permitted.
             </p>
             <div className="space-y-1.5">
-              <span className="inline-flex items-center gap-1.5 text-[11px] bg-slate-900 text-teal-300 px-2.5 py-1 rounded-md font-semibold border border-slate-800">
-                <Lock className="w-3 h-3 text-teal-400" />
+              <span className="inline-flex items-center gap-1.5 text-[11px] bg-slate-900 text-sky-300 px-2.5 py-1 rounded-md font-semibold border border-slate-800">
+                <Lock className="w-3 h-3 text-sky-400" />
                 HIPAA & SOC-2 Aligned
               </span>
               <span className="inline-flex items-center gap-1.5 text-[11px] bg-slate-900 text-slate-300 px-2.5 py-1 rounded-md font-semibold border border-slate-800 block">

@@ -46,7 +46,7 @@ export default function CartPage() {
 
         <Link
           href="/pharmacy"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-700 hover:text-teal-800"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-700 hover:text-sky-800"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Continue Shopping</span>
@@ -55,7 +55,7 @@ export default function CartPage() {
 
       {items.length === 0 ? (
         <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center max-w-lg mx-auto space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mx-auto">
+          <div className="w-16 h-16 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto">
             <ShoppingBag className="w-8 h-8" />
           </div>
           <h3 className="font-heading font-bold text-lg text-slate-900">
@@ -67,7 +67,7 @@ export default function CartPage() {
           <div className="pt-2">
             <Link
               href="/pharmacy"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md shadow-teal-600/20"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-md shadow-sky-600/20"
             >
               <span>Explore Pharmacy</span>
               <ArrowRight className="w-4 h-4" />
@@ -127,7 +127,7 @@ export default function CartPage() {
                     <div className="flex items-center border border-slate-200 rounded-xl bg-slate-50">
                       <button
                         onClick={() => updateQuantity(product.id, quantity - 1)}
-                        className="p-1.5 hover:text-teal-700"
+                        className="p-1.5 hover:text-sky-700"
                         aria-label="Decrease"
                       >
                         <Minus className="w-3.5 h-3.5" />
@@ -135,7 +135,7 @@ export default function CartPage() {
                       <span className="px-3 text-xs font-bold text-slate-900">{quantity}</span>
                       <button
                         onClick={() => updateQuantity(product.id, quantity + 1)}
-                        className="p-1.5 hover:text-teal-700"
+                        className="p-1.5 hover:text-sky-700"
                         aria-label="Increase"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -173,7 +173,7 @@ export default function CartPage() {
               <div className="flex justify-between">
                 <span>Estimated Shipping</span>
                 <span className="font-bold text-slate-900">
-                  {isFreeShipping ? <strong className="text-emerald-700">FREE</strong> : '$4.99'}
+                  {isFreeShipping ? <strong className="text-sky-700">FREE</strong> : '$4.99'}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -184,21 +184,21 @@ export default function CartPage() {
 
             <div className="pt-3 border-t border-slate-200 flex justify-between items-center">
               <span className="font-heading font-bold text-base text-slate-900">Total</span>
-              <span className="font-heading font-extrabold text-2xl text-teal-800">
+              <span className="font-heading font-extrabold text-2xl text-sky-800">
                 ${grandTotal.toFixed(2)}
               </span>
             </div>
 
             <Link
               href="/checkout"
-              className="w-full py-3.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-teal-600/20 active:scale-99 transition-all"
+              className="w-full py-3.5 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-sky-600/20 active:scale-99 transition-all"
             >
               <span>Proceed to Checkout</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 
             <div className="text-[11px] text-slate-600 text-center flex items-center justify-center gap-1">
-              <ShieldCheck className="w-4 h-4 text-teal-600" />
+              <ShieldCheck className="w-4 h-4 text-sky-600" />
               <span>Safe & compliant prescription dispensation</span>
             </div>
           </div>

@@ -167,7 +167,7 @@ export default function DoctorDashboardPage() {
   if (isAuthLoading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-24 text-center">
-        <div className="w-12 h-12 rounded-full border-4 border-teal-200 border-t-teal-600 animate-spin mx-auto mb-4" />
+        <div className="w-12 h-12 rounded-full border-4 border-sky-200 border-t-sky-600 animate-spin mx-auto mb-4" />
         <p className="text-xs text-slate-500 font-semibold">Loading Doctor Practice Portal...</p>
       </div>
     );
@@ -179,7 +179,7 @@ export default function DoctorDashboardPage() {
       {/* 1. Header Banner: Doctor Credentials & Teleconsult Status */}
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xs">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-100 text-teal-800 font-heading font-extrabold text-2xl flex items-center justify-center shrink-0">
+          <div className="w-16 h-16 rounded-2xl bg-sky-50 border border-sky-100 text-sky-800 font-heading font-extrabold text-2xl flex items-center justify-center shrink-0">
             {docName.replace('Dr. ', '').charAt(0)}
           </div>
           <div>
@@ -187,8 +187,8 @@ export default function DoctorDashboardPage() {
               <h1 className="font-heading font-extrabold text-xl sm:text-2xl text-slate-900">
                 Welcome, {docName}
               </h1>
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200">
-                <ShieldCheck className="w-3.5 h-3.5 text-teal-600" />
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-800 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-200">
+                <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
                 Verified Physician
               </span>
             </div>
@@ -207,7 +207,7 @@ export default function DoctorDashboardPage() {
               disabled={updating}
               className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all cursor-pointer ${
                 isOnline
-                  ? 'bg-emerald-600 text-white shadow-xs'
+                  ? 'bg-sky-500 text-white shadow-xs'
                   : 'bg-slate-200 text-slate-600 hover:bg-slate-300'
               }`}
             >
@@ -232,18 +232,18 @@ export default function DoctorDashboardPage() {
         <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-2xs space-y-1">
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-[11px] font-bold uppercase tracking-wider font-heading">Total Consults</span>
-            <Users className="w-4 h-4 text-teal-600" />
+            <Users className="w-4 h-4 text-sky-600" />
           </div>
           <span className="font-heading font-extrabold text-2xl text-slate-900">
             {doctorProfile?.total_reviews || 24}
           </span>
-          <span className="text-[11px] text-emerald-600 font-semibold block">Active Patient Inquiries</span>
+          <span className="text-[11px] text-sky-600 font-semibold block">Active Patient Inquiries</span>
         </div>
 
         <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-2xs space-y-1">
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-[11px] font-bold uppercase tracking-wider font-heading">Session Fee</span>
-            <DollarSign className="w-4 h-4 text-teal-600" />
+            <DollarSign className="w-4 h-4 text-sky-600" />
           </div>
           <span className="font-heading font-extrabold text-2xl text-slate-900">
             ${Number(doctorProfile?.consultation_fee || 35).toFixed(2)}
@@ -265,19 +265,19 @@ export default function DoctorDashboardPage() {
         <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-2xs space-y-1">
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-[11px] font-bold uppercase tracking-wider font-heading">Avg Response</span>
-            <Clock className="w-4 h-4 text-teal-600" />
+            <Clock className="w-4 h-4 text-sky-600" />
           </div>
           <span className="font-heading font-extrabold text-2xl text-slate-900">
             &lt; 3 mins
           </span>
-          <span className="text-[11px] text-emerald-600 font-semibold block">Fast Responder</span>
+          <span className="text-[11px] text-sky-600 font-semibold block">Fast Responder</span>
         </div>
       </div>
 
       {/* 3. Pharmacy Formulary Banner (Doctors can view & inspect pharmacy catalog) */}
-      <div className="p-5 sm:p-6 bg-gradient-to-r from-teal-50 via-slate-50 to-cyan-50 rounded-3xl border border-teal-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-5 sm:p-6 bg-gradient-to-r from-sky-50 via-slate-50 to-cyan-50 rounded-3xl border border-sky-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-teal-600/20">
+          <div className="w-12 h-12 rounded-2xl bg-sky-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-sky-600/20">
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
@@ -291,7 +291,7 @@ export default function DoctorDashboardPage() {
         </div>
         <Link
           href="/pharmacy"
-          className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-sm shrink-0 active:scale-95 transition-all"
+          className="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-heading font-bold text-xs flex items-center gap-2 shadow-sm shrink-0 active:scale-95 transition-all"
         >
           <span>Browse Pharmacy Catalog</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -308,7 +308,7 @@ export default function DoctorDashboardPage() {
               <h2 className="font-heading font-bold text-base text-slate-900">
                 Patient Chat History & Inquiries
               </h2>
-              <span className="px-2 py-0.5 rounded-full bg-teal-50 text-teal-800 text-[11px] font-bold border border-teal-200">
+              <span className="px-2 py-0.5 rounded-full bg-sky-50 text-sky-800 text-[11px] font-bold border border-sky-200">
                 {consultationsList.length} Inquiries
               </span>
             </div>
@@ -325,7 +325,7 @@ export default function DoctorDashboardPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search patient or symptoms..."
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-teal-600 focus:bg-white transition-all"
+              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-sky-600 focus:bg-white transition-all"
             />
           </div>
         </div>
@@ -343,7 +343,7 @@ export default function DoctorDashboardPage() {
               onClick={() => setStatusFilter(tab.key as any)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
                 statusFilter === tab.key
-                  ? 'bg-teal-600 text-white shadow-xs'
+                  ? 'bg-sky-600 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -368,16 +368,16 @@ export default function DoctorDashboardPage() {
             {filteredChats.map((item) => (
               <div
                 key={item.id}
-                className="p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-teal-500/80 hover:shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all group bg-white"
+                className="p-4 sm:p-5 rounded-2xl border border-slate-200 hover:border-sky-500/80 hover:shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all group bg-white"
               >
                 <div className="flex items-start gap-3.5">
-                  <div className="w-11 h-11 rounded-xl bg-teal-50 border border-teal-100 text-teal-800 font-heading font-extrabold text-base flex items-center justify-center shrink-0">
+                  <div className="w-11 h-11 rounded-xl bg-sky-50 border border-sky-100 text-sky-800 font-heading font-extrabold text-base flex items-center justify-center shrink-0">
                     {item.patientName.charAt(0)}
                   </div>
                   
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-heading font-bold text-sm text-slate-900 group-hover:text-teal-700 transition-colors">
+                      <span className="font-heading font-bold text-sm text-slate-900 group-hover:text-sky-700 transition-colors">
                         {item.patientName}
                       </span>
                       
@@ -387,7 +387,7 @@ export default function DoctorDashboardPage() {
                           ? 'bg-rose-50 text-rose-700 border-rose-200'
                           : item.urgency === 'moderate'
                           ? 'bg-amber-50 text-amber-800 border-amber-200'
-                          : 'bg-teal-50 text-teal-800 border-teal-200'
+                          : 'bg-sky-50 text-sky-800 border-sky-200'
                       }`}>
                         {item.urgency}
                       </span>
@@ -396,7 +396,7 @@ export default function DoctorDashboardPage() {
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
                         item.status === 'completed'
                           ? 'bg-slate-100 text-slate-600'
-                          : 'bg-emerald-50 text-emerald-700 font-bold'
+                          : 'bg-sky-50 text-sky-700 font-bold'
                       }`}>
                         {item.status === 'completed' ? 'Archived' : 'Active Chat'}
                       </span>

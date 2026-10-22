@@ -90,7 +90,7 @@ function LoginContent() {
       
       {/* Brand Header */}
       <div className="text-center space-y-2">
-        <div className="w-12 h-12 rounded-2xl bg-teal-600 text-white flex items-center justify-center mx-auto shadow-md shadow-teal-600/20">
+        <div className="w-12 h-12 rounded-2xl bg-sky-500 text-white flex items-center justify-center mx-auto shadow-md shadow-sky-500/25">
           <Stethoscope className="w-6 h-6" />
         </div>
         <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-slate-900">
@@ -102,9 +102,9 @@ function LoginContent() {
       </div>
 
       {searchParams.get('reason') === 'consultation' && (
-        <div className="p-4 bg-teal-50 border border-teal-200 rounded-2xl text-xs text-teal-800 space-y-1">
+        <div className="p-4 bg-sky-50 border border-sky-200 rounded-2xl text-xs text-sky-800 space-y-1">
           <div className="flex items-center gap-2 font-bold">
-            <Stethoscope className="w-4 h-4 text-teal-600 shrink-0" />
+            <Stethoscope className="w-4 h-4 text-sky-600 shrink-0" />
             <span>Consultation Sign-In Required</span>
           </div>
           <p className="text-[11px] text-slate-600">
@@ -135,7 +135,7 @@ function LoginContent() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@example.com"
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-teal-600 focus:bg-white"
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white"
             />
           </div>
         </div>
@@ -152,7 +152,7 @@ function LoginContent() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-teal-600 focus:bg-white"
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-sky-600 focus:bg-white"
             />
           </div>
         </div>
@@ -176,7 +176,7 @@ function LoginContent() {
           Don&apos;t have an account yet?{' '}
           <Link 
             href={`/auth/signup${redirectUrl !== '/' ? `?redirect=${encodeURIComponent(redirectUrl)}${searchParams.get('reason') ? `&reason=${searchParams.get('reason')}` : ''}` : ''}`} 
-            className="text-teal-700 font-bold hover:underline"
+            className="text-sky-700 font-bold hover:underline"
           >
             Create an Account
           </Link>

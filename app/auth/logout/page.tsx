@@ -68,16 +68,16 @@ function LogoutContent() {
         
         {/* Animated Status Icon */}
         <div className="relative mx-auto w-20 h-20 flex items-center justify-center">
-          <div className="absolute inset-0 rounded-3xl bg-teal-50 border border-teal-100 animate-pulse" />
-          <div className="relative w-14 h-14 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-lg shadow-teal-600/25">
+          <div className="absolute inset-0 rounded-3xl bg-sky-50 border border-sky-100 animate-pulse" />
+          <div className="relative w-14 h-14 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-lg shadow-sky-600/25">
             <CheckCircle2 className="w-8 h-8 text-white" />
           </div>
         </div>
 
         {/* Messaging */}
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold border border-emerald-200 uppercase tracking-wide">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-800 text-[11px] font-bold border border-sky-200 uppercase tracking-wide">
+            <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
             <span>Session Closed Securely</span>
           </div>
           <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-slate-900 tracking-tight">
@@ -104,7 +104,7 @@ function LogoutContent() {
             href="/auth/login"
             className="w-full flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-heading font-bold text-sm border border-slate-200 transition-all hover:-translate-y-0.5 active:translate-y-0"
           >
-            <LogIn className="w-4 h-4 text-teal-700" />
+            <LogIn className="w-4 h-4 text-sky-700" />
             <span>Sign In to Another Account</span>
             <ArrowRight className="w-3.5 h-3.5 ml-0.5 text-slate-400" />
           </Link>
@@ -118,10 +118,10 @@ function LogoutContent() {
           <div className="grid grid-cols-2 gap-2 text-left">
             <Link
               href="/pharmacy"
-              className="p-3 rounded-xl bg-slate-50 hover:bg-teal-50/60 border border-slate-100 hover:border-teal-200 transition-all group"
+              className="p-3 rounded-xl bg-slate-50 hover:bg-sky-50/60 border border-slate-100 hover:border-sky-200 transition-all group"
             >
-              <div className="flex items-center gap-2 text-slate-700 group-hover:text-teal-800">
-                <ShoppingBag className="w-4 h-4 text-teal-600" />
+              <div className="flex items-center gap-2 text-slate-700 group-hover:text-sky-800">
+                <ShoppingBag className="w-4 h-4 text-sky-600" />
                 <span className="text-xs font-bold font-heading">Pharmacy</span>
               </div>
               <p className="text-[10px] text-slate-500 mt-0.5">Direct medication delivery</p>
@@ -129,10 +129,10 @@ function LogoutContent() {
 
             <Link
               href="/hospitals"
-              className="p-3 rounded-xl bg-slate-50 hover:bg-teal-50/60 border border-slate-100 hover:border-teal-200 transition-all group"
+              className="p-3 rounded-xl bg-slate-50 hover:bg-sky-50/60 border border-slate-100 hover:border-sky-200 transition-all group"
             >
-              <div className="flex items-center gap-2 text-slate-700 group-hover:text-teal-800">
-                <Building2 className="w-4 h-4 text-teal-600" />
+              <div className="flex items-center gap-2 text-slate-700 group-hover:text-sky-800">
+                <Building2 className="w-4 h-4 text-sky-600" />
                 <span className="text-xs font-bold font-heading">Hospitals</span>
               </div>
               <p className="text-[10px] text-slate-500 mt-0.5">Emergency directory</p>
@@ -142,7 +142,7 @@ function LogoutContent() {
 
         {/* Security Note */}
         <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-600">
-          <UserCheck className="w-3.5 h-3.5 text-teal-600" />
+          <UserCheck className="w-3.5 h-3.5 text-sky-600" />
           <span>Protected by CLINIC End-to-End HIPAA Standard</span>
         </div>
 
@@ -156,13 +156,13 @@ function LogoutSkeleton() {
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-100 p-8 sm:p-10 text-center space-y-6">
         <div className="relative mx-auto w-20 h-20 flex items-center justify-center">
-          <div className="relative w-14 h-14 rounded-2xl bg-teal-600 text-white flex items-center justify-center shadow-lg shadow-teal-600/25">
+          <div className="relative w-14 h-14 rounded-2xl bg-sky-600 text-white flex items-center justify-center shadow-lg shadow-sky-600/25">
             <CheckCircle2 className="w-8 h-8 text-white" />
           </div>
         </div>
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold border border-emerald-200 uppercase tracking-wide">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-800 text-[11px] font-bold border border-sky-200 uppercase tracking-wide">
+            <ShieldCheck className="w-3.5 h-3.5 text-sky-600" />
             <span>Session Closed Securely</span>
           </div>
           <h1 className="font-heading font-extrabold text-2xl sm:text-3xl text-slate-900 tracking-tight">
@@ -184,7 +184,7 @@ function LogoutSkeleton() {
             href="/auth/login"
             className="w-full flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-heading font-bold text-sm border border-slate-200"
           >
-            <LogIn className="w-4 h-4 text-teal-700" />
+            <LogIn className="w-4 h-4 text-sky-700" />
             <span>Sign In Again</span>
           </Link>
         </div>

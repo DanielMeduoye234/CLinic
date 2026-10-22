@@ -158,30 +158,30 @@ export default function PharmacyPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
       
       {/* Header Banner */}
-      <div className="bg-linear-to-r from-teal-800 to-teal-950 text-white rounded-2xl p-5 sm:p-7 relative overflow-hidden">
+      <div className="bg-linear-to-r from-sky-800 to-sky-950 text-white rounded-2xl p-5 sm:p-7 relative overflow-hidden">
         <div className="max-w-2xl space-y-1.5 relative z-10">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold uppercase tracking-wider">
             <Pill className="w-3.5 h-3.5" />
             Licensed Digital Pharmacy
           </span>
           <h1 className="font-heading font-extrabold text-xl sm:text-3xl tracking-tight">
             Certified Medications & Wellness
           </h1>
-          <p className="text-xs sm:text-sm text-teal-100/80 leading-relaxed max-w-lg">
+          <p className="text-xs sm:text-sm text-sky-100/80 leading-relaxed max-w-lg">
             Purchase over-the-counter essentials or fulfill your doctor&apos;s digital prescription with express doorstep delivery.
           </p>
 
-          <div className="pt-3 flex flex-wrap gap-4 text-xs text-teal-200">
+          <div className="pt-3 flex flex-wrap gap-4 text-xs text-sky-200">
             <div className="flex items-center gap-1.5">
-              <Truck className="w-4 h-4 text-teal-400" />
+              <Truck className="w-4 h-4 text-sky-400" />
               <span>Free Express Delivery over $35</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-teal-400" />
+              <ShieldCheck className="w-4 h-4 text-sky-400" />
               <span>FDA / Regulatory Compliant</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-teal-400" />
+              <Clock className="w-4 h-4 text-sky-400" />
               <span>2-Hour Urgent Local Delivery Available</span>
             </div>
           </div>
@@ -199,7 +199,7 @@ export default function PharmacyPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by medicine name, generic ingredient (e.g. Ibuprofen), or category..."
-              className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600"
+              className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600"
             />
           </div>
 
@@ -216,7 +216,7 @@ export default function PharmacyPage() {
             <button
               onClick={() => setFilterRx('otc')}
               className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
-                filterRx === 'otc' ? 'bg-white text-emerald-800 shadow-xs' : 'text-slate-600'
+                filterRx === 'otc' ? 'bg-white text-sky-800 shadow-xs' : 'text-slate-600'
               }`}
             >
               OTC (No Rx)
@@ -240,7 +240,7 @@ export default function PharmacyPage() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all ${
                 selectedCategory === cat
-                  ? 'bg-teal-600 text-white shadow-xs'
+                  ? 'bg-sky-600 text-white shadow-xs'
                   : 'bg-white border border-slate-200/80 text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -268,7 +268,7 @@ export default function PharmacyPage() {
               setSelectedCategory('All');
               setFilterRx('all');
             }}
-            className="px-4 py-2 rounded-xl bg-teal-600 text-white text-xs font-bold"
+            className="px-4 py-2 rounded-xl bg-sky-600 text-white text-xs font-bold"
           >
             Clear Filters
           </button>

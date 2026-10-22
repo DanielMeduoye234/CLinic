@@ -75,7 +75,7 @@ export default function CheckoutPage() {
         <p className="text-xs text-slate-600">Please add items from the pharmacy catalog before checking out.</p>
         <button
           onClick={() => router.push('/pharmacy')}
-          className="px-5 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs"
+          className="px-5 py-2.5 rounded-xl bg-sky-600 text-white font-bold text-xs"
         >
           Go to Pharmacy
         </button>
@@ -104,7 +104,7 @@ export default function CheckoutPage() {
           {/* Step 1: Shipping Information */}
           <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-4">
             <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-              <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+              <span className="w-6 h-6 rounded-full bg-sky-600 text-white text-xs font-bold flex items-center justify-center">1</span>
               <h3 className="font-heading font-bold text-sm text-slate-900">
                 Delivery Address
               </h3>
@@ -120,7 +120,7 @@ export default function CheckoutPage() {
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-teal-600 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-sky-600 focus:outline-none"
                 />
               </div>
 
@@ -133,7 +133,7 @@ export default function CheckoutPage() {
                   required
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-teal-600 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-sky-600 focus:outline-none"
                 />
               </div>
 
@@ -146,7 +146,7 @@ export default function CheckoutPage() {
                   required
                   value={street}
                   onChange={(e) => setStreet(e.target.value)}
-                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-teal-600 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-sky-600 focus:outline-none"
                 />
               </div>
 
@@ -159,7 +159,7 @@ export default function CheckoutPage() {
                   required
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-teal-600 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-sky-600 focus:outline-none"
                 />
               </div>
 
@@ -173,7 +173,7 @@ export default function CheckoutPage() {
                     required
                     value={stateVal}
                     onChange={(e) => setStateVal(e.target.value)}
-                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-teal-600 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-sky-600 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -185,7 +185,7 @@ export default function CheckoutPage() {
                     required
                     value={zip}
                     onChange={(e) => setZip(e.target.value)}
-                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-teal-600 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:border-sky-600 focus:outline-none"
                   />
                 </div>
               </div>
@@ -196,19 +196,19 @@ export default function CheckoutPage() {
           {hasPrescriptionItems && (
             <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-3">
               <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-                <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">2</span>
+                <span className="w-6 h-6 rounded-full bg-sky-600 text-white text-xs font-bold flex items-center justify-center">2</span>
                 <h3 className="font-heading font-bold text-sm text-slate-900">
                   Prescription Verification
                 </h3>
               </div>
 
-              <div className="p-4 bg-teal-50 border border-teal-200 rounded-2xl flex items-start gap-3">
-                <FileCheck className="w-5 h-5 text-teal-700 shrink-0 mt-0.5" />
+              <div className="p-4 bg-sky-50 border border-sky-200 rounded-2xl flex items-start gap-3">
+                <FileCheck className="w-5 h-5 text-sky-700 shrink-0 mt-0.5" />
                 <div className="text-xs space-y-1">
-                  <p className="font-bold text-teal-950">
+                  <p className="font-bold text-sky-950">
                     Linked to CLINIC Teleconsultation #{Date.now().toString().slice(-4)}
                   </p>
-                  <p className="text-teal-800">
+                  <p className="text-sky-800">
                     Your certified digital prescription from your doctor consultation is automatically verified and attached to this delivery for our licensed pharmacist to dispense.
                   </p>
                 </div>
@@ -219,7 +219,7 @@ export default function CheckoutPage() {
           {/* Step 3: Delivery Speed Options */}
           <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-3">
             <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-              <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">3</span>
+              <span className="w-6 h-6 rounded-full bg-sky-600 text-white text-xs font-bold flex items-center justify-center">3</span>
               <h3 className="font-heading font-bold text-sm text-slate-900">
                 Delivery Method
               </h3>
@@ -230,13 +230,13 @@ export default function CheckoutPage() {
                 onClick={() => setDeliverySpeed('standard')}
                 className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
                   deliverySpeed === 'standard'
-                    ? 'border-teal-600 bg-teal-50/50'
+                    ? 'border-sky-600 bg-sky-50/50'
                     : 'border-slate-200 hover:border-slate-300'
                 }`}
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="font-bold text-slate-900">Standard Delivery</div>
-                  <span className="font-bold text-teal-800">{subtotal >= 35 ? 'FREE' : '$4.99'}</span>
+                  <span className="font-bold text-sky-800">{subtotal >= 35 ? 'FREE' : '$4.99'}</span>
                 </div>
                 <p className="text-slate-600 text-[11px]">
                   Estimated delivery in 1-2 business days via medical courier.
@@ -247,13 +247,13 @@ export default function CheckoutPage() {
                 onClick={() => setDeliverySpeed('express')}
                 className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
                   deliverySpeed === 'express'
-                    ? 'border-teal-600 bg-teal-50/50'
+                    ? 'border-sky-600 bg-sky-50/50'
                     : 'border-slate-200 hover:border-slate-300'
                 }`}
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="font-bold text-slate-900">Urgent 2-Hour Courier</div>
-                  <span className="font-bold text-teal-800">$9.99</span>
+                  <span className="font-bold text-sky-800">$9.99</span>
                 </div>
                 <p className="text-slate-600 text-[11px]">
                   Dispatched immediately from nearest partner pharmacy for acute symptoms.
@@ -265,7 +265,7 @@ export default function CheckoutPage() {
           {/* Step 4: Payment Simulation */}
           <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-3">
             <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-              <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">4</span>
+              <span className="w-6 h-6 rounded-full bg-sky-600 text-white text-xs font-bold flex items-center justify-center">4</span>
               <h3 className="font-heading font-bold text-sm text-slate-900">
                 Payment Method
               </h3>
@@ -273,7 +273,7 @@ export default function CheckoutPage() {
 
             <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between text-xs">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-7 rounded bg-teal-800 text-white flex items-center justify-center font-bold text-[10px]">
+                <div className="w-10 h-7 rounded bg-sky-800 text-white flex items-center justify-center font-bold text-[10px]">
                   VISA
                 </div>
                 <div>
@@ -281,7 +281,7 @@ export default function CheckoutPage() {
                   <p className="text-[11px] text-slate-600">Encrypted 256-bit checkout</p>
                 </div>
               </div>
-              <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded">
                 Verified
               </span>
             </div>
@@ -326,7 +326,7 @@ export default function CheckoutPage() {
 
           <div className="pt-3 border-t border-slate-200 flex justify-between items-center">
             <span className="font-heading font-bold text-base text-slate-900">Total</span>
-            <span className="font-heading font-extrabold text-2xl text-teal-800">
+            <span className="font-heading font-extrabold text-2xl text-sky-800">
               ${totalAmount.toFixed(2)}
             </span>
           </div>
@@ -334,7 +334,7 @@ export default function CheckoutPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-teal-600/20 active:scale-99 transition-all cursor-pointer"
+            className="w-full py-3.5 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-sky-600/20 active:scale-99 transition-all cursor-pointer"
           >
             {submitting ? (
               <span>Authorizing Prescription & Order...</span>

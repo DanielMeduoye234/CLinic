@@ -28,10 +28,10 @@ export async function sendDoctorApprovalEmail(params: {
           <style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; margin: 0; padding: 20px; color: #0f172a; }
             .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; }
-            .header { background: #0d9488; padding: 32px 24px; text-align: center; color: white; }
+            .header { background: #0ea5e9; padding: 32px 24px; text-align: center; color: white; }
             .content { padding: 32px 24px; line-height: 1.6; }
-            .badge { display: inline-block; background: #ccfbf1; color: #0f766e; padding: 6px 14px; border-radius: 9999px; font-weight: 600; font-size: 13px; margin-bottom: 16px; }
-            .cta-button { display: inline-block; background: #0d9488; color: white !important; font-weight: 600; padding: 14px 28px; border-radius: 12px; text-decoration: none; margin: 24px 0; }
+            .badge { display: inline-block; background: #e0f2fe; color: #0369a1; padding: 6px 14px; border-radius: 9999px; font-weight: 600; font-size: 13px; margin-bottom: 16px; }
+            .cta-button { display: inline-block; background: #0ea5e9; color: white !important; font-weight: 600; padding: 14px 28px; border-radius: 12px; text-decoration: none; margin: 24px 0; }
             .footer { background: #f1f5f9; padding: 20px 24px; text-align: center; font-size: 12px; color: #64748b; }
           </style>
         </head>

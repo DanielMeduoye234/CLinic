@@ -16,7 +16,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const isInCart = items.some((item) => item.product.id === product.id);
 
   return (
-    <div className="bg-white rounded-xl sm:rounded-2xl border border-slate-200/90 hover:border-teal-500/80 p-2.5 sm:p-4 transition-all duration-200 hover:shadow-lg hover:shadow-teal-500/5 flex flex-col justify-between group">
+    <div className="bg-white rounded-xl sm:rounded-2xl border border-slate-200/90 hover:border-sky-500/80 p-2.5 sm:p-4 transition-all duration-200 hover:shadow-lg hover:shadow-sky-500/5 flex flex-col justify-between group">
       <div>
         {/* Product Image & Badges */}
         <div className="relative aspect-square w-full rounded-lg sm:rounded-xl bg-slate-100 overflow-hidden mb-2 sm:mb-3 border border-slate-100">
@@ -34,7 +34,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 Rx Required
               </span>
             ) : (
-              <span className="bg-emerald-600/95 backdrop-blur-xs text-white text-[8px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-xs">
+              <span className="bg-sky-600/95 backdrop-blur-xs text-white text-[8px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-xs">
                 OTC
               </span>
             )}
@@ -52,7 +52,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Title */}
         <Link href={`/pharmacy/${product.slug}`} className="block">
-          <h4 className="font-heading font-bold text-xs sm:text-sm text-slate-900 group-hover:text-teal-700 transition-colors line-clamp-1 leading-snug">
+          <h4 className="font-heading font-bold text-xs sm:text-sm text-slate-900 group-hover:text-sky-700 transition-colors line-clamp-1 leading-snug">
             {product.name}
           </h4>
         </Link>
@@ -76,8 +76,8 @@ export default function ProductCard({ product }: ProductCardProps) {
           onClick={() => addItem(product, 1)}
           className={`px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg sm:rounded-xl font-bold text-[10px] sm:text-xs flex items-center gap-1 sm:gap-1.5 transition-all active:scale-95 shrink-0 ${
             isInCart
-              ? 'bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100'
-              : 'bg-teal-600 hover:bg-teal-700 text-white shadow-sm shadow-teal-600/20'
+              ? 'bg-sky-50 text-sky-800 border border-sky-200 hover:bg-sky-100'
+              : 'bg-sky-600 hover:bg-sky-700 text-white shadow-sm shadow-sky-600/20'
           }`}
           aria-label={`Add ${product.name} to cart`}
         >

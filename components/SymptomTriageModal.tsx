@@ -167,7 +167,7 @@ export default function SymptomTriageModal({
           {/* Modal Header */}
           <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
@@ -208,7 +208,7 @@ export default function SymptomTriageModal({
                     value={symptoms}
                     onChange={(e) => setSymptoms(e.target.value)}
                     placeholder="Describe how you feel in plain words (e.g., 'Throbbing headache on left side since yesterday, sensitive to bright light and feeling nauseous')..."
-                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 transition-all placeholder:text-slate-400 resize-none"
+                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-600 transition-all placeholder:text-slate-400 resize-none"
                   />
                 </div>
 
@@ -222,7 +222,7 @@ export default function SymptomTriageModal({
                         key={qs}
                         type="button"
                         onClick={() => setSymptoms(qs)}
-                        className="px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 hover:bg-teal-50 hover:text-teal-700 text-slate-700 transition-colors border border-slate-200/60"
+                        className="px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-700 transition-colors border border-slate-200/60"
                       >
                         {qs}
                       </button>
@@ -265,7 +265,7 @@ export default function SymptomTriageModal({
                         onClick={() => setDuration(dur)}
                         className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition-all ${
                           duration === dur
-                            ? 'bg-teal-50 border-teal-600 text-teal-800'
+                            ? 'bg-sky-50 border-sky-600 text-sky-800'
                             : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
                         }`}
                       >
@@ -280,7 +280,7 @@ export default function SymptomTriageModal({
                     <label className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading">
                       Pain or Discomfort Level (1 to 10)
                     </label>
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-teal-100 text-teal-800">
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-sky-100 text-sky-800">
                       {painLevel} / 10 — {painLevel <= 3 ? 'Mild' : painLevel <= 6 ? 'Moderate' : painLevel <= 8 ? 'Severe' : 'Very Severe'}
                     </span>
                   </div>
@@ -290,7 +290,7 @@ export default function SymptomTriageModal({
                     max={10}
                     value={painLevel}
                     onChange={(e) => setPainLevel(Number(e.target.value))}
-                    className="w-full accent-teal-600 cursor-pointer h-2 bg-slate-200 rounded-lg"
+                    className="w-full accent-sky-600 cursor-pointer h-2 bg-slate-200 rounded-lg"
                   />
                   <div className="flex justify-between text-[10px] text-slate-600 font-medium mt-1">
                     <span>1: Barely noticeable</span>
@@ -323,8 +323,8 @@ export default function SymptomTriageModal({
             {step === 3 && (
               <div className="py-12 flex flex-col items-center justify-center text-center space-y-4">
                 <div className="relative w-16 h-16">
-                  <div className="absolute inset-0 rounded-full border-4 border-teal-100 border-t-teal-600 animate-spin" />
-                  <div className="absolute inset-0 flex items-center justify-center text-teal-600">
+                  <div className="absolute inset-0 rounded-full border-4 border-sky-100 border-t-sky-600 animate-spin" />
+                  <div className="absolute inset-0 flex items-center justify-center text-sky-600">
                     <Activity className="w-6 h-6 animate-pulse" />
                   </div>
                 </div>
@@ -379,13 +379,13 @@ export default function SymptomTriageModal({
                   <>
                     {/* 
                     // COMMENTED OUT AS PER CLINICAL REQUIREMENT: AI automated diagnosis removed so licensed physicians perform direct diagnosis.
-                    <div className="p-4 bg-teal-50/70 border border-teal-200/80 rounded-2xl space-y-2">
+                    <div className="p-4 bg-sky-50/70 border border-sky-200/80 rounded-2xl space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-teal-800 bg-teal-100/80 px-2.5 py-0.5 rounded-full">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-sky-800 bg-sky-100/80 px-2.5 py-0.5 rounded-full">
                           Specialty: {triageResult.primary_specialty}
                         </span>
                         <span className="text-[11px] font-semibold text-slate-600 capitalize">
-                          Urgency: <strong className="text-teal-900">{triageResult.urgency}</strong>
+                          Urgency: <strong className="text-sky-900">{triageResult.urgency}</strong>
                         </span>
                       </div>
                       <p className="text-xs text-slate-700 leading-relaxed">
@@ -432,10 +432,10 @@ export default function SymptomTriageModal({
                             return (
                               <div
                                 key={doc.id}
-                                className="p-3.5 bg-white border border-slate-200 hover:border-teal-500 rounded-2xl transition-all shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                                className="p-3.5 bg-white border border-slate-200 hover:border-sky-500 rounded-2xl transition-all shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                               >
                                 <div className="flex items-start gap-3">
-                                  <div className="relative w-11 h-11 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-base shrink-0 overflow-hidden">
+                                  <div className="relative w-11 h-11 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-base shrink-0 overflow-hidden">
                                     {docName.charAt(0)}
                                     {doc.is_online && (
                                       <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
@@ -444,10 +444,10 @@ export default function SymptomTriageModal({
 
                                   <div>
                                     <div className="flex items-center gap-1.5">
-                                      <h5 className="font-heading font-bold text-xs text-slate-900 group-hover:text-teal-700 transition-colors">
+                                      <h5 className="font-heading font-bold text-xs text-slate-900 group-hover:text-sky-700 transition-colors">
                                         {docName}
                                       </h5>
-                                      <span className="inline-flex items-center gap-0.5 text-[10px] text-teal-700 bg-teal-50 px-1.5 py-0.2 rounded font-bold">
+                                      <span className="inline-flex items-center gap-0.5 text-[10px] text-sky-700 bg-sky-50 px-1.5 py-0.2 rounded font-bold">
                                         <ShieldCheck className="w-3 h-3" />
                                         Verified
                                       </span>

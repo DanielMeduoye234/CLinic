@@ -59,7 +59,7 @@ function SignUpContent() {
         if (redirectUrl && redirectUrl !== '/') {
           router.push(redirectUrl);
         } else {
-          router.push('/patient/consultations');
+          router.push('/patient/dashboard');
         }
       }
     } catch (err: any) {

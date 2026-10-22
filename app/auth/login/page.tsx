@@ -71,11 +71,11 @@ function LoginContent() {
         }
       }
 
-      // Patient sign in: Lead straight to my consultation page or specific redirect
+      // Patient sign in: Lead straight to patient dashboard or specific redirect
       if (redirectUrl && redirectUrl !== '/') {
         router.push(redirectUrl);
       } else {
-        router.push('/patient/consultations');
+        router.push('/patient/dashboard');
       }
     } catch (err: any) {
       console.error(err);

@@ -111,13 +111,21 @@ export default function PatientConsultationsPage() {
           </p>
         </div>
 
-        <Link
-          href="/doctors"
-          className="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm shadow-sky-500/25 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>New Consultation</span>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/patient/dashboard"
+            className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors"
+          >
+            ← Patient Dashboard
+          </Link>
+          <Link
+            href="/doctors"
+            className="px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm shadow-sky-500/25 transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Consultation</span>
+          </Link>
+        </div>
       </div>
 
       {/* Consultations List */}

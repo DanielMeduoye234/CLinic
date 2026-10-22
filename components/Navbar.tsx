@@ -184,11 +184,11 @@ export default function Navbar() {
                   </Link>
                 ) : (
                   <Link
-                    href="/patient/consultations"
-                    className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
+                    href="/patient/dashboard"
+                    className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-sky-800 bg-sky-50 border border-sky-200/60 hover:bg-sky-100 transition-colors"
                   >
                     <Activity className="w-3.5 h-3.5 text-sky-600" />
-                    <span>My Consultations</span>
+                    <span>Patient Dashboard</span>
                   </Link>
                 )}
 
@@ -234,15 +234,29 @@ export default function Navbar() {
                     ) : (
                       <>
                         <Link
-                          href="/patient/consultations"
-                          className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 rounded-lg transition-colors mt-1"
+                          href="/patient/dashboard"
+                          className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-800 rounded-lg transition-colors mt-1"
                         >
-                          <Activity className="w-4 h-4 text-slate-500" />
-                          My Consultations
+                          <Activity className="w-4 h-4 text-sky-600" />
+                          Patient Dashboard
                         </Link>
                         <Link
-                          href="/patient/profile"
-                          className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 rounded-lg transition-colors"
+                          href="/patient/dashboard?tab=doctors"
+                          className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-800 rounded-lg transition-colors"
+                        >
+                          <Stethoscope className="w-4 h-4 text-slate-500" />
+                          My Consulted Doctors
+                        </Link>
+                        <Link
+                          href="/patient/dashboard?tab=chats"
+                          className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-800 rounded-lg transition-colors"
+                        >
+                          <FileText className="w-4 h-4 text-slate-500" />
+                          Chat History
+                        </Link>
+                        <Link
+                          href="/patient/dashboard?tab=vault"
+                          className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-800 rounded-lg transition-colors"
                         >
                           <User className="w-4 h-4 text-slate-500" />
                           Medical Vault & Profile
@@ -510,22 +524,41 @@ export default function Navbar() {
                     </Link>
 
                     {user && (
-                      <Link
-                        href="/patient/profile"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 hover:bg-sky-50 text-slate-800 transition-colors border border-slate-100"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-purple-100/70 text-purple-700 flex items-center justify-center">
-                            <User className="w-4 h-4" />
+                      <>
+                        <Link
+                          href="/patient/dashboard"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center justify-between p-3 rounded-xl bg-sky-50/80 hover:bg-sky-100/80 text-sky-950 transition-colors border border-sky-200/60"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-sky-500 text-white flex items-center justify-center shadow-xs">
+                              <Activity className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className="font-heading font-bold text-xs text-sky-950">Patient Dashboard</div>
+                              <div className="text-[10px] text-sky-700">Doctors, chat history & health records</div>
+                            </div>
                           </div>
-                          <div>
-                            <div className="font-heading font-bold text-xs text-slate-900">My Health Vault</div>
-                            <div className="text-[10px] text-slate-500">Consultation notes, prescriptions & records</div>
+                          <span className="text-sky-600 text-xs font-bold">→</span>
+                        </Link>
+
+                        <Link
+                          href="/patient/dashboard?tab=vault"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 hover:bg-sky-50 text-slate-800 transition-colors border border-slate-100"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-purple-100/70 text-purple-700 flex items-center justify-center">
+                              <User className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className="font-heading font-bold text-xs text-slate-900">Medical Vault & Profile</div>
+                              <div className="text-[10px] text-slate-500">Blood group, allergies & emergency contact</div>
+                            </div>
                           </div>
-                        </div>
-                        <span className="text-slate-400 text-xs font-bold">→</span>
-                      </Link>
+                          <span className="text-slate-400 text-xs font-bold">→</span>
+                        </Link>
+                      </>
                     )}
                   </>
                 )}

@@ -79,17 +79,23 @@ export default function PatientProfilePage() {
 
         <div className="flex items-center gap-2">
           <Link
-            href="/auth/logout"
-            className="px-3.5 py-2 rounded-xl text-rose-600 bg-rose-50/80 hover:bg-rose-100 border border-rose-200 font-bold text-xs flex items-center gap-1.5 transition-colors"
+            href="/patient/dashboard"
+            className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors"
           >
-            <LogOut className="w-3.5 h-3.5 text-rose-500" />
-            <span>Sign Out</span>
+            ← Dashboard
           </Link>
           <Link
             href="/doctors"
             className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-bold text-xs shadow-sm shadow-sky-500/20 transition-all"
           >
             Consult Doctor
+          </Link>
+          <Link
+            href="/auth/logout"
+            className="p-2 rounded-xl text-rose-600 bg-rose-50/80 hover:bg-rose-100 border border-rose-200 font-bold text-xs flex items-center gap-1.5 transition-colors"
+            title="Sign Out"
+          >
+            <LogOut className="w-4 h-4 text-rose-500" />
           </Link>
         </div>
       </div>

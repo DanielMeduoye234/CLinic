@@ -810,8 +810,8 @@ export default function ConsultationChatRoomPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-0 sm:px-4 lg:px-6 sm:py-4 mb-0 sm:mb-16">
-      <div className="h-[calc(100dvh-4.25rem)] sm:h-[calc(100dvh-10rem)] sm:min-h-[580px] sm:max-h-[820px] rounded-none sm:rounded-3xl border-0 sm:border sm:border-slate-200/90 shadow-none sm:shadow-lg bg-white overflow-hidden flex flex-col">
+    <div className="max-w-5xl mx-auto p-0 sm:px-4 lg:px-6 sm:py-3 mb-0">
+      <div className="h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-5.5rem)] rounded-none sm:rounded-3xl border-0 sm:border sm:border-slate-200/90 shadow-none sm:shadow-md bg-white overflow-hidden flex flex-col">
       
       {/* Hidden Audio Player instance */}
       <audio ref={audioPlayerRef} className="hidden" />

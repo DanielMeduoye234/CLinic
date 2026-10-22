@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { DoctorProfile } from '@/lib/types';
 import { ShieldCheck, Star, Clock, MessageSquare, Hospital } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
+import { supabase } from '@/lib/supabase/client';
 
 interface DoctorCardProps {
   doctor: DoctorProfile;
@@ -16,7 +17,7 @@ export default function DoctorCard({ doctor }: DoctorCardProps) {
   const { user, profile } = useAuth();
   const docName = (doctor.profiles as any)?.full_name || 'Dr. Medical Specialist';
 
-  const handleStartChat = () => {
+  const handleStartChat = async () => {
     if (!user) {
       router.push(`/auth/login?redirect=/consultation/${doctor.id}&reason=consultation`);
       return;
@@ -25,6 +26,41 @@ export default function DoctorCard({ doctor }: DoctorCardProps) {
       router.push('/doctor/dashboard');
       return;
     }
+
+    try {
+      const { data: existing } = await supabase
+        .from('consultations')
+        .select('id')
+        .eq('patient_id', user.id)
+        .eq('doctor_id', doctor.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (existing?.id) {
+        router.push(`/consultation/${existing.id}`);
+        return;
+      }
+
+      const { data: newCons } = await supabase
+        .from('consultations')
+        .insert({
+          patient_id: user.id,
+          doctor_id: doctor.id,
+          raw_symptoms: 'Direct teleconsultation request',
+          status: 'active'
+        })
+        .select('id')
+        .maybeSingle();
+
+      if (newCons?.id) {
+        router.push(`/consultation/${newCons.id}`);
+        return;
+      }
+    } catch (e) {
+      console.error('Error starting chat:', e);
+    }
+
     router.push(`/consultation/${doctor.id}`);
   };
 

@@ -85,7 +85,7 @@ export default function DoctorDashboardPage() {
               full_name
             )
           `)
-          .eq('doctor_id', doctorProfile.id)
+          .or(`doctor_id.eq.${doctorProfile.id}${user?.id ? `,doctor_id.eq.${user.id}` : ''}`)
           .order('created_at', { ascending: false });
 
         if (!error && realCons) {

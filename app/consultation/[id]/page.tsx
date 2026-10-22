@@ -47,6 +47,7 @@ export default function ConsultationChatRoomPage() {
   const params = useParams();
   const router = useRouter();
   const consultationId = params.id as string;
+  const [activeConsultationId, setActiveConsultationId] = useState<string>(consultationId);
   const { user, profile, doctorProfile, isLoading: isAuthLoading } = useAuth();
   const { addItem, openCart } = useCart();
 
@@ -111,33 +112,9 @@ export default function ConsultationChatRoomPage() {
       try {
         let docData: any = null;
         let isDocChattingPatient = false;
+        let resolvedConsId = consultationId;
 
-        // Check if this consultationId is a known demo consultation from the doctor dashboard
-        if (consultationId === 'cons-1') {
-          setPatientInfo({
-            name: 'David K. (38)',
-            symptoms: 'Acute throbbing migraine on left temple with photophobia for 2 days.',
-            urgency: 'moderate',
-            time: '5 mins ago',
-          });
-          if (profile?.role === 'doctor') {
-            setIsDoctorView(true);
-            isDocChattingPatient = true;
-          }
-        } else if (consultationId === 'cons-2') {
-          setPatientInfo({
-            name: 'Elena R. (29)',
-            symptoms: 'Itchy contact dermatitis rash on forearm after gardening.',
-            urgency: 'routine',
-            time: '18 mins ago',
-          });
-          if (profile?.role === 'doctor') {
-            setIsDoctorView(true);
-            isDocChattingPatient = true;
-          }
-        }
-
-        // Try 1: check if consultationId is an active consultation record in Supabase
+        // 1. Try checking if consultationId matches an active consultation record in Supabase
         const { data: consultationRecord } = await supabase
           .from('consultations')
           .select(`
@@ -179,6 +156,7 @@ export default function ConsultationChatRoomPage() {
           .maybeSingle();
 
         if (consultationRecord) {
+          resolvedConsId = consultationRecord.id;
           docData = consultationRecord.doctor;
           const patientName = (consultationRecord.patient as any)?.full_name || 'Verified Patient';
           setPatientInfo({
@@ -187,7 +165,7 @@ export default function ConsultationChatRoomPage() {
             urgency: consultationRecord.ai_urgency || 'routine',
           });
 
-          // Role enforcement:
+          // Strict Doctor Isolation:
           if (profile?.role === 'doctor') {
             const isAssignedDoctor = 
               consultationRecord.doctor_id === doctorProfile?.id || 
@@ -197,14 +175,14 @@ export default function ConsultationChatRoomPage() {
               setIsDoctorView(true);
               isDocChattingPatient = true;
             } else {
-              // Doctor attempting to access another doctor's consultation or chat another doctor!
+              // Doctor attempting to access another doctor's consultation!
               setIsDoctorForbidden(true);
               setLoading(false);
               return;
             }
           }
         } else {
-          // If not a consultation row, check if consultationId is a doctor's profile ID or doctor_profiles ID
+          // If not a consultation record, consultationId is a doctor's ID (e.g. from /doctors/[id])
           const { data: d1 } = await supabase
             .from('doctor_profiles')
             .select(`
@@ -254,12 +232,47 @@ export default function ConsultationChatRoomPage() {
             if (d2) docData = d2;
           }
 
-          // If current user is a doctor and trying to chat a doctor:
+          // Doctors cannot chat other doctors!
           if (profile?.role === 'doctor' && !isDocChattingPatient) {
-            // Doctors cannot chat other doctors!
             setIsDoctorForbidden(true);
             setLoading(false);
             return;
+          }
+
+          // If current user is an authenticated patient, find or create their persistent consultation record
+          if (user?.id && docData?.id) {
+            const { data: existingCons } = await supabase
+              .from('consultations')
+              .select('id, raw_symptoms, ai_urgency')
+              .eq('patient_id', user.id)
+              .eq('doctor_id', docData.id)
+              .order('created_at', { ascending: false })
+              .limit(1)
+              .maybeSingle();
+
+            if (existingCons) {
+              resolvedConsId = existingCons.id;
+              setPatientInfo({
+                name: profile?.full_name || 'Verified Patient',
+                symptoms: existingCons.raw_symptoms || 'General clinical inquiry',
+                urgency: existingCons.ai_urgency || 'routine',
+              });
+            } else {
+              const { data: createdCons } = await supabase
+                .from('consultations')
+                .insert({
+                  patient_id: user.id,
+                  doctor_id: docData.id,
+                  raw_symptoms: 'Direct teleconsultation inquiry',
+                  status: 'active'
+                })
+                .select('id')
+                .maybeSingle();
+
+              if (createdCons) {
+                resolvedConsId = createdCons.id;
+              }
+            }
           }
         }
 
@@ -294,30 +307,70 @@ export default function ConsultationChatRoomPage() {
           setDoctor(docData as unknown as DoctorProfile);
         }
 
-        const physicianName = (docData?.profiles as any)?.full_name || 'Dr. Medical Specialist';
+        setActiveConsultationId(resolvedConsId);
 
-        // Query real messages from Supabase
-        const { data: realMessages } = await supabase
-          .from('messages')
+        // Load persistent messages from Supabase (chat_messages with messages fallback)
+        let dbMessages: any[] = [];
+        const { data: m1, error: e1 } = await supabase
+          .from('chat_messages')
           .select('*')
-          .eq('consultation_id', consultationId)
+          .eq('consultation_id', resolvedConsId)
           .order('created_at', { ascending: true });
 
+        if (!e1 && m1) {
+          dbMessages = m1;
+        } else {
+          const { data: m2 } = await supabase
+            .from('messages')
+            .select('*')
+            .eq('consultation_id', resolvedConsId)
+            .order('created_at', { ascending: true });
+          if (m2) dbMessages = m2;
+        }
+
+        // Also retrieve local storage cache for immediate offline/resilient persistence
+        let cachedMessages: ChatMessage[] = [];
+        try {
+          const raw = localStorage.getItem(`clinic_chat_${resolvedConsId}`);
+          if (raw) cachedMessages = JSON.parse(raw);
+        } catch (e) {}
+
+        const combinedMap = new Map<string, ChatMessage>();
         const systemNotice: ChatMessage = {
           id: 'msg-system-1',
-          consultation_id: consultationId,
+          consultation_id: resolvedConsId,
           sender_id: 'system',
           message_type: 'system',
           content: 'End-to-end encrypted medical consultation channel established. Your clinical privacy is protected under HIPAA guidelines.',
           is_read: true,
           created_at: new Date().toISOString(),
         };
+        combinedMap.set('msg-system-1', systemNotice);
 
-        if (realMessages && realMessages.length > 0) {
-          setMessages([systemNotice, ...(realMessages as ChatMessage[])]);
-        } else {
-          setMessages([systemNotice]);
-        }
+        dbMessages.forEach((m: any) => {
+          combinedMap.set(m.id, {
+            id: m.id,
+            consultation_id: m.consultation_id,
+            sender_id: m.sender_id,
+            message_type: m.message_type,
+            content: m.content || '',
+            attachment_url: m.attachment_url,
+            attachment_metadata: m.attachment_metadata,
+            is_read: m.is_read,
+            created_at: m.created_at,
+          });
+        });
+
+        cachedMessages.forEach((m) => {
+          if (!combinedMap.has(m.id)) {
+            combinedMap.set(m.id, m);
+          }
+        });
+
+        const sorted = Array.from(combinedMap.values()).sort(
+          (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+        setMessages(sorted);
       } catch (err) {
         console.error('Error loading consultation:', err);
       } finally {
@@ -330,33 +383,117 @@ export default function ConsultationChatRoomPage() {
     }
   }, [consultationId, profile, doctorProfile, user, isAuthLoading]);
 
-  // Setup Supabase Realtime channel
+  // Setup Supabase Realtime channel (broadcast & postgres_changes)
   useEffect(() => {
-    const channel = supabase.channel(`consultation:${consultationId}`)
+    if (!activeConsultationId) return;
+
+    const channel = supabase.channel(`consultation:${activeConsultationId}`)
       .on('broadcast', { event: 'new-message' }, (payload) => {
         if (payload?.payload) {
-          setMessages((prev) => [...prev, payload.payload]);
+          const incoming = payload.payload as ChatMessage;
+          setMessages((prev) => {
+            if (prev.some((m) => m.id === incoming.id)) return prev;
+            return [...prev, incoming];
+          });
+          try {
+            const key = `clinic_chat_${activeConsultationId}`;
+            const cached = JSON.parse(localStorage.getItem(key) || '[]');
+            if (!cached.some((m: any) => m.id === incoming.id)) {
+              localStorage.setItem(key, JSON.stringify([...cached, incoming]));
+            }
+          } catch (e) {}
         }
       })
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: `consultation_id=eq.${activeConsultationId}`,
+        },
+        (payload) => {
+          if (payload?.new) {
+            const row = payload.new as any;
+            const incoming: ChatMessage = {
+              id: row.id,
+              consultation_id: row.consultation_id,
+              sender_id: row.sender_id,
+              message_type: row.message_type,
+              content: row.content,
+              attachment_url: row.attachment_url,
+              attachment_metadata: row.attachment_metadata,
+              is_read: row.is_read,
+              created_at: row.created_at,
+            };
+            setMessages((prev) => {
+              if (prev.some((m) => m.id === incoming.id)) return prev;
+              return [...prev, incoming];
+            });
+          }
+        }
+      )
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [consultationId]);
+  }, [activeConsultationId]);
+
+  // Unified Message Persistence & Realtime Dispatch
+  const persistAndDispatchMessage = async (msg: ChatMessage) => {
+    const targetId = activeConsultationId || consultationId;
+    msg.consultation_id = targetId;
+
+    // 1. Optimistic UI update
+    setMessages((prev) => [...prev, msg]);
+
+    // 2. Local Storage Cache (instant persistence across browser reloads)
+    try {
+      const key = `clinic_chat_${targetId}`;
+      const cached = JSON.parse(localStorage.getItem(key) || '[]');
+      localStorage.setItem(key, JSON.stringify([...cached, msg]));
+    } catch (e) {
+      console.error('Local cache error:', e);
+    }
+
+    // 3. Supabase Realtime Broadcast
+    supabase.channel(`consultation:${targetId}`).send({
+      type: 'broadcast',
+      event: 'new-message',
+      payload: msg,
+    });
+
+    // 4. Supabase Database Insert (tries chat_messages, fallback to messages)
+    if (user?.id) {
+      const dbPayload = {
+        consultation_id: targetId,
+        sender_id: user.id,
+        message_type: msg.message_type,
+        content: msg.content || null,
+        attachment_url: msg.attachment_url && !msg.attachment_url.startsWith('blob:') ? msg.attachment_url : null,
+        attachment_metadata: msg.attachment_metadata || {},
+        is_read: false,
+      };
+
+      const { error: insErr } = await supabase.from('chat_messages').insert(dbPayload);
+      if (insErr) {
+        console.warn('chat_messages insert error, attempting messages table:', insErr);
+        await supabase.from('messages').insert(dbPayload);
+      }
+    }
+  };
 
   // Handle Text Message Send
   const handleSendMessage = () => {
     if (!inputText.trim()) return;
 
     const userText = inputText.trim();
-    const senderId = isDoctorView 
-      ? (user?.id || doctor?.profile_id || 'doctor-1')
-      : (user?.id || 'patient-user');
+    const senderId = user?.id || (isDoctorView ? 'doctor' : 'patient');
 
     const newMessage: ChatMessage = {
-      id: `msg-${Date.now()}`,
-      consultation_id: consultationId,
+      id: `msg-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      consultation_id: activeConsultationId,
       sender_id: senderId,
       message_type: 'text',
       content: userText,
@@ -364,65 +501,8 @@ export default function ConsultationChatRoomPage() {
       created_at: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, newMessage]);
     setInputText('');
-
-    // Broadcast via Supabase Realtime
-    supabase.channel(`consultation:${consultationId}`).send({
-      type: 'broadcast',
-      event: 'new-message',
-      payload: newMessage,
-    });
-
-    // Persist real message to Supabase
-    supabase.from('messages').insert({
-      consultation_id: consultationId,
-      sender_id: senderId,
-      message_type: 'text',
-      content: userText,
-      is_read: false
-    }).then(({ error }) => {
-      if (error) console.error('Error persisting message:', error);
-    });
-
-    /*
-    // COMMENTED OUT AS PER CLINICAL REQUIREMENT: Real licensed doctors conduct clinical evaluations directly without automated AI diagnoses.
-    if (!isDoctorView) {
-      setIsDoctorTyping(true);
-      setTimeout(() => {
-        setIsDoctorTyping(false);
-        const lower = userText.toLowerCase();
-        let replyText = "Thank you for the update. I am reviewing your clinical response. Please tell me if this is accompanied by any nausea, dizziness, or shortness of breath?";
-        
-        if (lower.includes('pain') || lower.includes('hurt') || lower.includes('ache') || lower.includes('sore')) {
-          replyText = "I understand you are experiencing discomfort. On a scale of 1 to 10, how intense would you rate the pain right now? Does resting or changing position relieve it?";
-        } else if (lower.includes('cough') || lower.includes('fever') || lower.includes('cold') || lower.includes('flu') || lower.includes('throat')) {
-          replyText = "Noted on the viral/upper respiratory symptoms. Keep your fluid intake high with warm herbal tea or broth. I will review suitable supportive therapeutics for you.";
-        } else if (lower.includes('prescription') || lower.includes('medicine') || lower.includes('rx') || lower.includes('antibiotic') || lower.includes('drug')) {
-          replyText = "I can prepare an electronic prescription for you right now so our pharmacy can fulfill doorstep delivery. Do you have any known allergies to antibiotics or NSAIDs?";
-        } else if (lower.includes('headache') || lower.includes('migraine')) {
-          replyText = "Headache symptoms can stem from tension, dehydration, or vascular inflammation. Are you experiencing sensitivity to bright lights or sound?";
-        }
-
-        const doctorReply: ChatMessage = {
-          id: `doc-reply-${Date.now()}`,
-          consultation_id: consultationId,
-          sender_id: doctor?.profile_id || 'doctor-1',
-          message_type: 'text',
-          content: replyText,
-          is_read: true,
-          created_at: new Date().toISOString(),
-        };
-
-        setMessages((prev) => [...prev, doctorReply]);
-        supabase.channel(`consultation:${consultationId}`).send({
-          type: 'broadcast',
-          event: 'new-message',
-          payload: doctorReply,
-        });
-      }, 1500);
-    }
-    */
+    persistAndDispatchMessage(newMessage);
   };
 
   // Voice Note Recording (Web Audio API)
@@ -445,8 +525,8 @@ export default function ConsultationChatRoomPage() {
 
         const voiceMessage: ChatMessage = {
           id: `audio-${Date.now()}`,
-          consultation_id: consultationId,
-          sender_id: user?.id || 'patient-user',
+          consultation_id: activeConsultationId,
+          sender_id: user?.id || (isDoctorView ? 'doctor' : 'patient'),
           message_type: 'audio',
           attachment_url: audioUrl,
           attachment_metadata: {
@@ -456,7 +536,7 @@ export default function ConsultationChatRoomPage() {
           created_at: new Date().toISOString(),
         };
 
-        setMessages((prev) => [...prev, voiceMessage]);
+        persistAndDispatchMessage(voiceMessage);
         stream.getTracks().forEach((track) => track.stop());
       };
 
@@ -522,8 +602,8 @@ export default function ConsultationChatRoomPage() {
     const imgUrl = URL.createObjectURL(file);
     const imgMessage: ChatMessage = {
       id: `img-${Date.now()}`,
-      consultation_id: consultationId,
-      sender_id: user?.id || 'patient-user',
+      consultation_id: activeConsultationId,
+      sender_id: user?.id || (isDoctorView ? 'doctor' : 'patient'),
       message_type: 'image',
       content: file.name,
       attachment_url: imgUrl,
@@ -531,7 +611,7 @@ export default function ConsultationChatRoomPage() {
       created_at: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, imgMessage]);
+    persistAndDispatchMessage(imgMessage);
   };
 
   // File Upload (PDF / Lab Report)
@@ -542,8 +622,8 @@ export default function ConsultationChatRoomPage() {
     const fileUrl = URL.createObjectURL(file);
     const fileMessage: ChatMessage = {
       id: `file-${Date.now()}`,
-      consultation_id: consultationId,
-      sender_id: user?.id || 'patient-user',
+      consultation_id: activeConsultationId,
+      sender_id: user?.id || (isDoctorView ? 'doctor' : 'patient'),
       message_type: 'file',
       content: file.name,
       attachment_url: fileUrl,
@@ -555,15 +635,15 @@ export default function ConsultationChatRoomPage() {
       created_at: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, fileMessage]);
+    persistAndDispatchMessage(fileMessage);
   };
 
   // Issue Digital Prescription (Doctor Action)
   const handleIssuePrescription = () => {
     const rxMessage: ChatMessage = {
       id: `rx-${Date.now()}`,
-      consultation_id: consultationId,
-      sender_id: doctor?.profile_id || 'doctor-1',
+      consultation_id: activeConsultationId,
+      sender_id: doctor?.profile_id || user?.id || 'doctor',
       message_type: 'prescription',
       content: JSON.stringify({
         diagnosis: rxDiagnosis || 'Acute Upper Respiratory Tract Infection',
@@ -573,7 +653,7 @@ export default function ConsultationChatRoomPage() {
       created_at: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, rxMessage]);
+    persistAndDispatchMessage(rxMessage);
     setIsPrescriptionModalOpen(false);
   };
 
@@ -657,7 +737,7 @@ export default function ConsultationChatRoomPage() {
         <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-3">
           <Link
             href={`/auth/login?redirect=/consultation/${consultationId}&reason=consultation`}
-            className="w-full py-3 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-sky-600/20 active:scale-98 transition-all"
+            className="w-full py-3 px-4 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-sky-500/20 active:scale-98 transition-all"
           >
             <span>Sign In to Start Chat</span>
             <ArrowRight className="w-4 h-4" />
@@ -1129,7 +1209,7 @@ export default function ConsultationChatRoomPage() {
                 if (e.key === 'Enter') handleSendMessage();
               }}
               placeholder="Type your message, symptom questions, or updates..."
-              className="min-w-0 flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 border border-slate-200/80 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 focus:bg-white transition-all"
+              className="min-w-0 flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 border border-slate-200/80 rounded-xl text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 focus:bg-white transition-all"
             />
 
             {/* Voice Note Trigger or Send Message */}

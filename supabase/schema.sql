@@ -118,6 +118,15 @@ create table if not exists public.chat_messages (
     created_at timestamptz default now() not null
 );
 
+-- Compatibility view for queries referencing 'messages' table
+do $$ begin
+    if not exists (select 1 from pg_tables where schemaname = 'public' and tablename = 'messages') then
+        create or replace view public.messages as select * from public.chat_messages;
+    end if;
+exception
+    when others then null;
+end $$;
+
 -- 8. DIGITAL PRESCRIPTIONS
 create table if not exists public.prescriptions (
     id uuid primary key default uuid_generate_v4(),

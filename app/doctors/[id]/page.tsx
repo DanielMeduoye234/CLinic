@@ -84,7 +84,7 @@ export default function DoctorDetailPage() {
     }
   }, [doctorId]);
 
-  const handleStartConsultation = () => {
+  const handleStartConsultation = async () => {
     if (!user) {
       router.push(`/auth/login?redirect=/consultation/${doctorId}&reason=consultation`);
       return;
@@ -93,6 +93,43 @@ export default function DoctorDetailPage() {
       router.push('/doctor/dashboard');
       return;
     }
+
+    try {
+      // Check if an existing consultation already exists between this patient and doctor
+      const { data: existing } = await supabase
+        .from('consultations')
+        .select('id')
+        .eq('patient_id', user.id)
+        .eq('doctor_id', doctorId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (existing?.id) {
+        router.push(`/consultation/${existing.id}`);
+        return;
+      }
+
+      // Create new persistent consultation record immediately
+      const { data: newCons } = await supabase
+        .from('consultations')
+        .insert({
+          patient_id: user.id,
+          doctor_id: doctorId,
+          raw_symptoms: 'Direct teleconsultation request',
+          status: 'active'
+        })
+        .select('id')
+        .maybeSingle();
+
+      if (newCons?.id) {
+        router.push(`/consultation/${newCons.id}`);
+        return;
+      }
+    } catch (e) {
+      console.error('Error starting consultation:', e);
+    }
+
     router.push(`/consultation/${doctorId}`);
   };
 
